@@ -213,23 +213,20 @@
 <!-- testmonial_area_end -->
 
     <!------------------------------------------------------------------------------------------------------------------------->
-    <div class="testmonial_area">
+    <!-- <div class="testmonial_area">
         <div class="container">
             <div class="row justify-content-center">
-                <div class="col-lg-10">
+                <div class="col-lg-10"> -->
     
                     <!-- Здесь блок карты -->
-                    <div id="map" style="height: 1600px; width: 100%; margin-top: 20px; margin-bottom: 20px;"></div>
-                    <div id="map" style="height: 4727px; width: 100%; position: relative;">
-                        <!-- <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(255,255,255,0.7); padding: 10px; text-align: center;">
-                            <p>Коснитесь, чтобы активировать карту</p>
-                            <button onclick="enableMapInteraction()">Активировать</button>
-                        </div> -->
+                    <div id="map" style="height: 1600px; width: 100%; margin-top: 20px; margin-bottom: 20px;">
                     </div>
-                </div>
+                    <div id="map" style="height: 1600px; width: 100%; position: relative;">
+                    </div>
+                <!-- </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <script>
         function enableMapInteraction() {
@@ -239,7 +236,7 @@
         // Инициализация карты
         var map = L.map('map', {
             maxZoom: 24,
-            minZoom: -2.4,
+            minZoom: -2,
             crs: L.CRS.Simple,
             maxBounds: [
                 [0, 0],
