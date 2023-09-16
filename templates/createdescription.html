@@ -2,4 +2,30 @@
 
 {% block title %}{% endblock %}
 
-{% block content %}{% endblock %}
+{% block content %}
+
+    <div>
+        <h1>Форма события</h1>
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            
+            <label>{{ form.title.label }}</label>
+            {{ form.title() }}<br>
+            
+            <label>{{ form.short_description.label }}</label>
+            {{ form.short_description() }}<br>
+
+            <label>{{ form.full_story.label }}</label>
+            {{ form.full_story() }}<br>
+
+            <label>{{ form.event_photo.label }}</label>
+            {{ form.event_photo() }}<br>
+
+            <label>{{ form.multiple_photos.label }}</label>
+            {{ form.multiple_photos() }}<br>
+
+            <button type="submit">Отправить</button>
+        </form>
+    </div>
+
+{% endblock %}
