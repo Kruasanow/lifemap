@@ -28,4 +28,151 @@
         </form>
     </div>
 
+    <style>
+        /* Стиль для экранов с шириной менее 768px (обычно это мобильные устройства) */
+        @media (max-width: 767px) {
+            #square1 {
+                width: 90%;
+                /* height: 700px; */
+                display: block;
+                margin: 0 auto; /* Центрирует кнопку горизонтально */
+            }
+        }
+
+        /* Стиль для экранов с шириной 768px и более (обычно это планшеты, ноутбуки и десктопы) */
+        @media (min-width: 768px) {
+            #square1 {
+                width: 60%;
+                display: block;
+                margin: 0 auto; /* Центрирует кнопку горизонтально */
+            }
+        }
+    </style>
+
+    <!-- <form action="/button_pressed" method="post">
+        <input type="submit" id="square1" class="square-button1" value="Click me!">
+    </form> -->
+
+    <style>
+        /* Добавьте этот CSS на вашу страницу, например, в элемент <style> в шапке документа */
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%; /* или задайте конкретную высоту, если хотите ограничить карту по высоте */
+            margin: 0; /* Убираем отступы */
+        }
+    </style>
+    
+    <style>
+                /* Стиль для экранов с шириной менее 768px (обычно это мобильные устройства) */
+        @media (max-width: 767px) {
+            #map {
+                width: 90%;
+                height: 700px; 
+            }
+        }
+
+        /* Стиль для экранов с шириной 768px и более (обычно это планшеты, ноутбуки и десктопы) */
+        @media (min-width: 768px) {
+            #map {
+                width: 60%;
+            }
+        }
+    </style>
+
+                    <!-- Здесь блок карты -->
+                    <div class="map-wrapper" style="display: flex; justify-content: center; width: 100%;">
+                        <div id="map" style="height: 1600px; margin-top: 20px; margin-bottom: 20px;"></div>
+                    </div>
+                    
+                    
+                    <script>
+                        function enableMapInteraction() {
+                            map.tap.enable();
+                        }
+                    
+                        var map = L.map('map', {
+                            maxZoom: 24,
+                            minZoom: -2,
+                            crs: L.CRS.Simple,
+                            maxBounds: [
+                                [0, 0],
+                                [6909, 4727]
+                            ],
+                            maxBoundsViscosity: 1.0,
+                            tap: false
+                        }).setView([3454.5, 2363.5], 1);
+                    
+                        var bounds = [
+                            [0, 0],
+                            [6909, 4727]
+                        ];
+                    
+                        L.imageOverlay("{{ url_for('static', filename='img/ready_map2.png') }}", bounds).addTo(map);
+                        map.fitBounds(bounds);
+                    
+                        var currentCircle = null;
+                    
+                        map.on('click', function(event) {
+                            const x = event.latlng.lng;
+                            const y = event.latlng.lat;
+                    
+                            if (currentCircle) {
+                                map.removeLayer(currentCircle);
+                            }
+                    
+                            currentCircle = L.circle([y, x], {
+                                color: 'red',
+                                fillColor: '#f03',
+                                fillOpacity: 1,
+                                radius: 10
+                            }).addTo(map);
+                    
+                            $.ajax({
+                                url: '/save_coordinates',
+                                method: 'POST',
+                                data: {
+                                    'x': x,
+                                    'y': y
+                                },
+                                success: function(response) {
+                                    console.log(response);
+                                }
+                            });
+                        });
+                    
+                        map.fitBounds(bounds);
+                        map.invalidateSize();  // Добавлено для коррекции размера карты
+                    </script>
+
+    <style>
+        /* Стиль для экранов с шириной менее 768px (обычно это мобильные устройства) */
+        @media (max-width: 767px) {
+            #square {
+                width: 90%;
+                /* height: 700px; */
+                display: block;
+                margin: 0 auto; /* Центрирует кнопку горизонтально */
+            }
+        }
+
+        /* Стиль для экранов с шириной 768px и более (обычно это планшеты, ноутбуки и десктопы) */
+        @media (min-width: 768px) {
+            #square {
+                width: 60%;
+                display: block;
+                margin: 0 auto; /* Центрирует кнопку горизонтально */
+            }
+        }
+    </style>
+
+    <!-- <form action="/button_pressed" method="post">
+        <input type="submit" id="square" class="square-button" value="Click me!">
+    </form> -->
 {% endblock %}

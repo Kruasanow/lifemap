@@ -12,6 +12,27 @@
         </div>
     {% endif %}
 {% endwith %}
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const adminCheckbox = document.getElementById('admin');
+            const adminKeyLabel = document.getElementById('admin_key_label');
+            const adminKeyInput = document.getElementById('admin_key');
+
+            adminCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    adminKeyLabel.style.display = 'block';
+                    adminKeyInput.style.display = 'block';
+                    adminKeyInput.setAttribute('required', 'required');
+                } else {
+                    adminKeyLabel.style.display = 'none';
+                    adminKeyInput.style.display = 'none';
+                    adminKeyInput.removeAttribute('required');
+                }
+            });
+        });
+    </script>
+
     <h2>Login</h2>
     <form action="/login" method="post">
         <label for="username">Username:</label>
@@ -19,6 +40,12 @@
 
         <label for="password">Password:</label>
         <input type="password" id="password" name="password" required><br><br>
+
+        <label for="admin">Admin:</label>
+        <input type="checkbox" id="admin" name="admin" value="1"><br><br>
+
+        <label for="admin_key" id="admin_key_label" style="display: none;">Admin key:</label>
+        <input type="password" id="admin_key" name="admin_key" style="display: none;">        
 
         <input type="submit" value="Login">
     </form>
