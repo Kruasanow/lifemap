@@ -118,6 +118,15 @@ def main():
 def main_2():
     return render_template('main_2.html')    
 
+@app.route('/article/<int:event_id>')
+def article(event_id):
+    cur = get_db_connection().cursor()
+    cur.execute('SELECT * FROM events WHERE id = %s;', (event_id,))
+    event = cur.fetchone()
+    if not event:
+        return "Статья не найдена", 404
+    return render_template('article.html', event=event)
+
 @app.route('/')
 @login_required
 def index():

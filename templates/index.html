@@ -125,13 +125,36 @@
         }
     </style>
 
+    <style>
+        .marker-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: red;
+        }
+
+        .marker-icon img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
+
                     <!-- Здесь блок карты -->
                     <div class="map-wrapper" style="display: flex; justify-content: center; width: 100%;">
                         <div id="map" style="height: 1600px; margin-top: 20px; margin-bottom: 20px;"></div>
                     </div>
                     
+                    <script>
+                        var userFolderPath = "{{ url_for('static', filename='uploads/' + username) }}";
+                    </script>
                     
                     <script>
+                        var username = "{{ username }}"; 
+                    
                         function enableMapInteraction() {
                             map.tap.enable();
                         }
@@ -188,26 +211,28 @@
                     
                         map.fitBounds(bounds);
                         map.invalidateSize();  // Добавлено для коррекции размера карты
-
+                    
                         var data = {{ ext|tojson }}; // Преобразуем ваш список списков в JSON
-
+                    
                         data.forEach(function(item) {
                             let coords = item[0].split(':');
                             let x = parseFloat(coords[0]);
                             let y = parseFloat(coords[1]);
+                            let eventId = item[0];  // предполагая, что ID события находится в первом элементе
 
-                            let marker = L.circle([y, x], {
-                                color: 'red',
-                                fillColor: '#f03',
-                                fillOpacity: 1,
-                                radius: 10
-                            }).addTo(map);
+                            // HTML для всплывающего окна с названием и ссылкой на статью
+                            let popupHtml = `
+                                <h4>${item[2]}</h4>
+                                <a href="/article/${eventId}">Подробнее</a>
+                            `;
 
-                            marker.on('click', function() {
-                                alert(item[1]);
+                            let markerIcon = L.divIcon({
+                                className: 'marker-icon',
+                                html: `<img src="${userFolderPath}/${item[1]}/${item[3]}" alt="Marker Image">`
                             });
-                        });
 
+                            L.marker([y, x], {icon: markerIcon}).bindPopup(popupHtml).addTo(map);
+                        });
                     </script>
 
     <style>
