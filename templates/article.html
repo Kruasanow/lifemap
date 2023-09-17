@@ -8,23 +8,32 @@
 
 <h1>{{ event[2] }}</h1> <!-- Заголовок статьи -->
 <p>{{ event[3] }}</p> <!-- Краткое описание -->
-<img src="{{ url_for('static', filename='uploads/' + event[8] + '/' + event[5]) }}" alt="Главное изображение"> <!-- Главное изображение -->
+
+<!-- Проверка на существование изображения -->
+{% if event[5] %}
+    <img src="{{ url_for('static', filename='uploads/' + event[8] + '/' + event[5].replace('\\', '/')) }}" alt="Главное изображение">
+{% else %}
+    <p>Изображение отсутствует.</p>
+{% endif %}
+
 <p>{{ event[4] }}</p> <!-- Полное описание -->
 
-<!-- Галерея карусель (вы можете использовать любую библиотеку, которую предпочитаете) -->
+<!-- Галерея карусель -->
 <div class="gallery">
-    {% for photo in event[6] %}
-    <img src="{{ url_for('static', filename='uploads/' + event[8] + '/' + photo) }}" alt="Галерея изображений">
-    {% endfor %}
+    {% if event[6] %}
+        {% for photo in event[6] %}
+            <img src="{{ url_for('static', filename='uploads/' + event[8] + '/' + photo.replace('\\', '/')) }}" alt="Галерея изображений">
+        {% endfor %}
+    {% else %}
+        <p>Галерея изображений отсутствует.</p>
+    {% endif %}
 </div>
 
-<!-- Рейтинг в виде звездочек (это только основа, вы можете добавить скрипты или стили) -->
+<!-- Рейтинг в виде звездочек -->
 <div class="rating">
-    {% for _ in range(event[7]) %}
-    ★ <!-- Это звезда для положительного рейтинга -->
-    {% endfor %}
-    {% for _ in range(5 - event[7]) %}
-    ☆ <!-- Это "пустая" звезда -->
+    {% set rating = event[7] if event[7] is not none else 0 %}
+    {% for _ in range(rating) %}
+        {# ваш код для отображения звезд рейтинга #}
     {% endfor %}
 </div>
 

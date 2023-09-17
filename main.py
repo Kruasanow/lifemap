@@ -118,10 +118,13 @@ def main():
 def main_2():
     return render_template('main_2.html')    
 
-@app.route('/article/<int:event_id>')
-def article(event_id):
+@app.route('/article/<path:unique_identifier>')
+def article(unique_identifier):
+    # Разбить unique_identifier на две части: имя пользователя и название события
+    username, event_title = unique_identifier.split("_", 1)
+    
     cur = get_db_connection().cursor()
-    cur.execute('SELECT * FROM events WHERE id = %s;', (event_id,))
+    cur.execute('SELECT * FROM events WHERE owner_name = %s AND title = %s;', (username, event_title))
     event = cur.fetchone()
     if not event:
         return "Статья не найдена", 404

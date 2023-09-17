@@ -218,17 +218,19 @@
                             let coords = item[0].split(':');
                             let x = parseFloat(coords[0]);
                             let y = parseFloat(coords[1]);
-                            let eventId = item[0];  // предполагая, что ID события находится в первом элементе
+
+                            // Создание unique_identifier для данного события
+                            let uniqueIdentifier = `${username}_${item[1]}`;
 
                             // HTML для всплывающего окна с названием и ссылкой на статью
                             let popupHtml = `
-                                <h4>${item[2]}</h4>
-                                <a href="/article/${eventId}">Подробнее</a>
+                                <h4>${item[1]}</h4>
+                                <a href="/article/${uniqueIdentifier}">Подробнее</a>
                             `;
 
                             let markerIcon = L.divIcon({
                                 className: 'marker-icon',
-                                html: `<img src="${userFolderPath}/${item[1]}/${item[3]}" alt="Marker Image">`
+                                html: `<img src="${userFolderPath}/${item[1]}/${item[2]}" alt="Marker Image">`
                             });
 
                             L.marker([y, x], {icon: markerIcon}).bindPopup(popupHtml).addTo(map);
