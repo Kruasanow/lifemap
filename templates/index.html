@@ -188,6 +188,26 @@
                     
                         map.fitBounds(bounds);
                         map.invalidateSize();  // Добавлено для коррекции размера карты
+
+                        var data = {{ ext|tojson }}; // Преобразуем ваш список списков в JSON
+
+                        data.forEach(function(item) {
+                            let coords = item[0].split(':');
+                            let x = parseFloat(coords[0]);
+                            let y = parseFloat(coords[1]);
+
+                            let marker = L.circle([y, x], {
+                                color: 'red',
+                                fillColor: '#f03',
+                                fillOpacity: 1,
+                                radius: 10
+                            }).addTo(map);
+
+                            marker.on('click', function() {
+                                alert(item[1]);
+                            });
+                        });
+
                     </script>
 
     <style>
