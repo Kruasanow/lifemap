@@ -7,11 +7,12 @@ from flask_bcrypt import Bcrypt
 from init_db import get_db_connection
 from functools import wraps
 from sensetive_data import admin_key, app_secret_key
+from f import EventForm, allowed_file, replaced_string
 
 app = Flask(__name__)
 app.secret_key = app_secret_key  # Random secret key for sessions
 bcrypt = Bcrypt(app)
-app.config['UPLOAD_FOLDER'] = 'uploads/'  # Папка для загрузки файлов
+app.config['UPLOAD_FOLDER'] = 'static/uploads/'  # Папка для загрузки файлов
 
 ADMIN_KEY = admin_key
 
@@ -68,7 +69,6 @@ def register():
 
     return render_template('register.html')
 
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -107,8 +107,6 @@ def login():
 
     return render_template('login.html')
 
-
-
 @app.route('/main')
 @login_required
 @admin_required
@@ -123,12 +121,19 @@ def main_2():
 @app.route('/')
 @login_required
 def index():
-    return render_template('index.html')
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute('SELECT * FROM events WHERE owner_name = %s;', (session['username'],))
+    data = cur.fetchall()
+
+    extracted = [[t[1], t[2], t[3], replaced_string(t[5])] for t in data]
+    print(extracted)
+    return render_template('index.html', ext = extracted, username = session['username'])
 
 @app.route('/createdescription', methods=['GET', 'POST'])
 @login_required
 def createdescription():
-    from f import EventForm, allowed_file
     form = EventForm()
     if form.validate_on_submit():
         title = form.title.data

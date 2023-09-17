@@ -44,45 +44,20 @@
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="owl-carousel textmonial_active">
+                    {% for item in ext %}
                     <div class="testmonial_wrap">
                         <div class="single_testmonial d-flex align-items-center">
                             <div class="test_thumb">
-                                <img src="img/testmonial/1.png" alt="">
+                                <img src="{{ url_for('static', filename='uploads/' + username + '/' + item[1] + '/' + item[3]) }}" alt="">
                             </div>
                             <div class="test_content">
-                                <h4>1Jhon Walker</h4>
-                                <span>Head of web design</span>
-                                <p>Lorem ipsum...</p>
+                                <h4>{{ item[1] }}</h4>
+                                <span>{{ item[2] }}</span>
+                                <p>{{ item[3] }}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="testmonial_wrap">
-                        <div class="single_testmonial d-flex align-items-center">
-                            <div class="test_thumb">
-                                <img src="img/testmonial/1.png" alt="">
-                            </div>
-                            <div class="test_content">
-                                <h4>2Jhon Walker</h4>
-                                <span>Head of web design</span>
-                                <p>Lorem ipsum...</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="testmonial_wrap">
-                        <div class="single_testmonial d-flex align-items-center">
-                            <div class="test_thumb">
-                                <img src="img/testmonial/1.png" alt="">
-                            </div>
-                            <div class="test_content">
-                                <h4>3Jhon Walker</h4>
-                                <span>Head of web design</span>
-                                <p>Lorem ipsum...</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- ...
-                    [Добавьте другие слайды по аналогии]
-                    ... -->
+                    {% endfor %}
                 </div>
             </div>
         </div>
