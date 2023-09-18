@@ -33,22 +33,66 @@
         });
     </script>
 
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: #900; /* красный цвет текста */
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh; /* высота экрана */
+            background-color: #fdf4f4; /* светло-серый фон */
+        }
+
+        form {
+            background-color: #fff; /* белый фон */
+            padding: 20px;
+            border: 2px solid #900; /* красная рамка */
+            border-radius: 8px; /* закругленные углы */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* тень */
+        }
+
+        input[type="submit"] {
+            background-color: #900; /* красный фон */
+            color: #fff; /* белый текст */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px; /* закругленные углы */
+            cursor: pointer; /* указатель руки при наведении */
+            transition: background-color 0.3s; /* плавное изменение фона */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #700; /* темно-красный фон при наведении */
+        }
+
+        label, input {
+            margin-bottom: 10px;
+        }
+    </style>
+
     <h2>Login</h2>
-    <form action="/login" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br><br>
+    <div class="login-container">
+        <form action="/login" method="post">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br><br>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br><br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br><br>
 
-        <label for="admin">Admin:</label>
-        <input type="checkbox" id="admin" name="admin" value="1"><br><br>
+            <label for="admin">Admin:</label>
+            <input type="checkbox" id="admin" name="admin" value="1"><br><br>
 
-        <label for="admin_key" id="admin_key_label" style="display: none;">Admin key:</label>
-        <input type="password" id="admin_key" name="admin_key" style="display: none;">        
+            <label for="admin_key" id="admin_key_label" style="display: none;">Admin key:</label>
+            <input type="password" id="admin_key" name="admin_key" style="display: none;"><br><br>
 
-        <input type="submit" value="Login">
-    </form>
+            <input type="submit" value="Login">
+        </form>
+    </div>
     <br>
     <a href="/register">Don't have an account? Register here</a>
 
