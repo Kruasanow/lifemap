@@ -3,6 +3,7 @@
 {% block title %}{% endblock %}
 
 {% block content %}
+{{username}}
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div>
@@ -31,6 +32,9 @@
 
             <label>{{ form.multiple_photos.label }}</label>
             {{ form.multiple_photos() }}<br>
+
+            <label>{{ form.rating.label }}</label>
+            {{ form.rating() }}<br>
 
             <button type="submit">Отправить</button>
         </form>

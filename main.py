@@ -34,6 +34,19 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+@app.route('/switch_user', methods=['POST'])
+def switch_user():
+    new_username = request.form.get('username')
+    # В этом месте вы должны добавить код для проверки, разрешено ли текущему пользователю становиться другим пользователем
+    session['username'] = new_username
+    return redirect(url_for('main'))
+
+@app.before_request
+def restore_original_username():
+    # Проверяем, является ли конечная точка не 'main' и есть ли в сессии 'original_username'
+    if request.endpoint != 'main' and 'original_username' in session:
+        session['username'] = session['original_username']
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -71,6 +84,10 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    try:
+        username = session['username']
+    except Exception:
+        username = 'Вы еще не вошли в аккаунт'
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -89,6 +106,7 @@ def login():
 
         if stored_password and bcrypt.check_password_hash(stored_password[0], password):
             session['loggedin'] = True
+            session['original_username'] = username
             session['username'] = username
 
             # Проверка на наличие прав админа
@@ -105,21 +123,45 @@ def login():
             flash('Login failed! Check your username and password.', 'danger')
             return redirect(url_for('login'))
 
-    return render_template('login.html')
+    return render_template('login.html', username = username)
 
 @app.route('/main')
 @login_required
 @admin_required
 def main():
-    return render_template('main.html')
+
+    try:
+        username = session['username']
+    except Exception:
+        username = 'Вы еще не вошли в аккаунт'
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT username FROM users")
+    users = [user[0] for user in cur.fetchall()]
+
+    cur.execute('SELECT * FROM events WHERE owner_name = %s;', (session['username'],))
+    data = cur.fetchall()
+
+    extracted = [[t[1], t[2], t[3], replaced_string(t[5])] for t in data]
+    return render_template('main.html', ext = extracted, users = users, username = username)
 
 @app.route('/main_2')
 @login_required
 def main_2():
-    return render_template('main_2.html')    
+    try:
+        username = session['username']
+    except Exception:
+        username = 'Вы еще не вошли в аккаунт'
+    return render_template('main_2.html', username = username)    
 
 @app.route('/article/<path:unique_identifier>')
 def article(unique_identifier):
+    try:
+        username = session['username']
+    except Exception:
+        username = 'Вы еще не вошли в аккаунт'
     # Разбить unique_identifier на две части: имя пользователя и название события
     username, event_title = unique_identifier.split("_", 1)
     
@@ -128,30 +170,39 @@ def article(unique_identifier):
     event = cur.fetchone()
     if not event:
         return "Статья не найдена", 404
-    return render_template('article.html', event=event)
+    return render_template('article.html', event=event, username = username)
 
 @app.route('/')
 @login_required
 def index():
+    try:
+        username = session['username']
+    except Exception:
+        username = 'Вы еще не вошли в аккаунт'
     conn = get_db_connection()
     cur = conn.cursor()
 
     cur.execute('SELECT * FROM events WHERE owner_name = %s;', (session['username'],))
     data = cur.fetchall()
-    for t in data:
-        print(t)
+    # for t in data:
+        # print(t)
     extracted = [[t[1], t[2], t[3], replaced_string(t[5])] for t in data]
-    print(extracted)
-    return render_template('index.html', ext = extracted, username = session['username'])
+    # print(extracted)
+    return render_template('index.html', ext = extracted, username = username)
 
 @app.route('/createdescription', methods=['GET', 'POST'])
 @login_required
 def createdescription():
+    try:
+        username = session['username']
+    except Exception:
+        username = 'Вы еще не вошли в аккаунт'
     form = EventForm()
     if form.validate_on_submit():
         title = form.title.data
         short_description = form.short_description.data
         full_description = form.full_story.data
+        rating = form.rating.data
 
         # Создаем основную директорию для события
         user_folder = os.path.join(app.config['UPLOAD_FOLDER'], session['username'])
@@ -197,9 +248,10 @@ def createdescription():
             conn = get_db_connection()
             cur = conn.cursor()
 
-            cur.execute('INSERT INTO events (coords, title, short_description, full_description, photo, gallery_photos, owner_name) '
-                        'VALUES (%s, %s, %s, %s, %s, %s, %s)',
-                        (coords, title, short_description, full_description, photo_path, gallery_paths, session['username']))
+            cur.execute('INSERT INTO events (coords, title, short_description, full_description, photo, gallery_photos, rating, owner_name) '
+                        'VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
+                        (coords, title, short_description, full_description, photo_path, gallery_paths, rating, session['username']))
+
 
             conn.commit()
             cur.close()
@@ -211,7 +263,7 @@ def createdescription():
 
         return redirect(url_for('createdescription'))
 
-    return render_template('createdescription.html', form=form)
+    return render_template('createdescription.html', form=form, username = username)
 
 @app.route('/save_coordinates', methods=['POST'])
 def save_coordinates():

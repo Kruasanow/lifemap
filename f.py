@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, FileField, MultipleFileField
+from wtforms import StringField, TextAreaField, FileField, MultipleFileField, IntegerField, validators
 from wtforms.validators import DataRequired
 
 class EventForm(FlaskForm):
@@ -8,6 +8,7 @@ class EventForm(FlaskForm):
     full_story = TextAreaField('Полная история')
     event_photo = FileField('Фото события')
     multiple_photos = MultipleFileField('Выберите до 20 фотографий', render_kw={"multiple": True})
+    rating = IntegerField('Рейтинг', validators=[DataRequired(), validators.NumberRange(min=1, max=10)])
 
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}

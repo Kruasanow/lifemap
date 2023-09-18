@@ -24,8 +24,8 @@ try:
                         'full_description TEXT,'
                         'photo TEXT,'
                         'gallery_photos TEXT[],'
-                        'rating INTEGER,'
-                        'owner_name TEXT,'
+                        'rating INTEGER NOT NULL,'
+                        'owner_name TEXT NOT NULL,'
                         'date_added date DEFAULT CURRENT_TIMESTAMP);'
                 )
 except Exception:
