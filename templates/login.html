@@ -75,25 +75,25 @@
         }
     </style>
 
-    <h2>Login</h2>
+    <h2>Вход в систему</h2>
     <div class="login-container">
         <form action="/login" method="post">
-            <label for="username">Username:</label>
+            <label for="username">Имя пользователя:</label>
             <input type="text" id="username" name="username" required><br><br>
 
-            <label for="password">Password:</label>
+            <label for="password">Пароль:</label>
             <input type="password" id="password" name="password" required><br><br>
 
-            <label for="admin">Admin:</label>
+            <label for="admin">Режим админа:</label>
             <input type="checkbox" id="admin" name="admin" value="1"><br><br>
 
-            <label for="admin_key" id="admin_key_label" style="display: none;">Admin key:</label>
+            <label for="admin_key" id="admin_key_label" style="display: none;">Ключ:</label>
             <input type="password" id="admin_key" name="admin_key" style="display: none;"><br><br>
 
-            <input type="submit" value="Login">
+            <input type="submit" value="Проникнуть">
         </form>
     </div>
     <br>
-    <a href="/register">Don't have an account? Register here</a>
+    <a href="/register">Не зарегестрированы?<span style="color: rgb(210, 210, 210); font-size: small;"> ... пиздец</span> Нажмите тут!</a>
 
 {% endblock %}
