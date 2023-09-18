@@ -138,7 +138,8 @@ def index():
 
     cur.execute('SELECT * FROM events WHERE owner_name = %s;', (session['username'],))
     data = cur.fetchall()
-
+    for t in data:
+        print(t)
     extracted = [[t[1], t[2], t[3], replaced_string(t[5])] for t in data]
     print(extracted)
     return render_template('index.html', ext = extracted, username = session['username'])
@@ -186,19 +187,27 @@ def createdescription():
         else:
             gallery_paths = []
 
-        coords = session['X'] + ':' + session['Y']
+        try:
+            coords = session['X'] + ':' + session['Y']
+            
+            # Удалите координаты из сессии сразу после их использования
+            session.pop('X', None)
+            session.pop('Y', None)
+            
+            conn = get_db_connection()
+            cur = conn.cursor()
 
+            cur.execute('INSERT INTO events (coords, title, short_description, full_description, photo, gallery_photos, owner_name) '
+                        'VALUES (%s, %s, %s, %s, %s, %s, %s)',
+                        (coords, title, short_description, full_description, photo_path, gallery_paths, session['username']))
+
+            conn.commit()
+            cur.close()
+            conn.close()
+        except Exception:
+            flash('Выберите координаты')
         # Вставляем данные в базу данных
-        conn = get_db_connection()
-        cur = conn.cursor()
 
-        cur.execute('INSERT INTO events (coords, title, short_description, full_description, photo, gallery_photos, owner_name) '
-                    'VALUES (%s, %s, %s, %s, %s, %s, %s)',
-                    (coords, title, short_description, full_description, photo_path, gallery_paths, session['username']))
-
-        conn.commit()
-        cur.close()
-        conn.close()
 
         return redirect(url_for('createdescription'))
 

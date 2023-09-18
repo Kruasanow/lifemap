@@ -14,5 +14,8 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 def replaced_string(stroka):
-    left, right = stroka.split("\\")
-    return right
+    try:
+        left, right = stroka.split("\\")
+    except Exception:
+        left, right = '', ''
+    return [left, right]

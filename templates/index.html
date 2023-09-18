@@ -48,12 +48,14 @@
                     <div class="testmonial_wrap">
                         <div class="single_testmonial d-flex align-items-center">
                             <div class="test_thumb">
-                                <img src="{{ url_for('static', filename='uploads/' + username + '/' + item[1] + '/' + item[3]) }}" alt="">
+                                {% if item[3] and item[3][0] and item[3][1] %}
+                                    <img src="{{ url_for('static', filename='uploads/' + username + '/' + item[3][0] + '/' + item[3][1]) }}" alt="">
+                                {% endif %}
                             </div>
                             <div class="test_content">
                                 <h4>{{ item[1] }}</h4>
                                 <span>{{ item[2] }}</span>
-                                <p>{{ item[3] }}</p>
+                                <!-- <p>{{ item[3] }}</p> -->
                             </div>
                         </div>
                     </div>
