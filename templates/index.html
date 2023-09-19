@@ -12,15 +12,15 @@
                 <div class="row">
                     <div class="col-lg-5 col-md-6">
                         <div class="slider_text">
-                            <h3>We Care <br> <span>Your Pets</span></h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur <br> adipiscing elit, sed do eiusmod.</p>
-                            <a href="contact.html" class="boxed-btn4">Contact Us</a>
+                            <h3>Мы сохраним <br> <span>Твои воспоминанния</span></h3>
+                            <p>Самые яркие эмоции. <br> Самое лучшее настроение.</p><br>
+                            <a href="/createdescription" class="boxed-btn4">Создать событие</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="dog_thumb d-none d-lg-block">
-                <img src="{{ url_for('static', filename='img/banner/dog.png')}}" alt="">
+                <img src="{{ url_for('static', filename='img/banner/zalupa2.png')}}" alt="">
             </div>
         </div>
     </div>
@@ -38,10 +38,13 @@
         });
         </script>
 <!-- testmonial_area_start -->
+
 <div class="testmonial_area">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-10">
+                <h3 align="center" style="font-weight:bold;">◀☸▶ Карусель событий:</h3>
+                <br>
                 <div class="owl-carousel textmonial_active">
                     {% for item in ext %}
                     <div class="testmonial_wrap">
@@ -87,10 +90,26 @@
                 margin: 0 auto; /* Центрирует кнопку горизонтально */
             }
         }
-    </style>
+        input[type="submit"] {
+            background-color: #900; /* красный фон */
+            color: #fff; /* белый текст */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px; /* закругленные углы */
+            cursor: pointer; /* указатель руки при наведении */
+            transition: background-color 0.3s; /* плавное изменение фона */
+        }
 
+        input[type="submit"]:hover {
+            background-color: #700; /* темно-красный фон при наведении */
+        }
+
+    </style>
+   
+    <h3 align="center" style="font-weight:bold;">☑ Карта событий:</h3>
+    <br>
     <form action="/button_pressed" method="post">
-        <input type="submit" id="square1" class="square-button1" value="Click me!">
+        <input type="submit" id="square1" class="square-button1" value="Увековечить воспоминание!">
     </form>
 
     <style>
@@ -143,7 +162,6 @@
             max-height: 100%;
         }
     </style>
-
                     <!-- Здесь блок карты -->
                     <div class="map-wrapper" style="display: flex; justify-content: center; width: 100%;">
                         <div id="map" style="height: 1600px; margin-top: 20px; margin-bottom: 20px;"></div>
@@ -260,7 +278,7 @@
     </style>
 
     <form action="/button_pressed" method="post">
-        <input type="submit" id="square" class="square-button" value="Click me!">
+        <input type="submit" id="square" class="square-button" value="Сохранить воспоминание!">
     </form>
 
     <!-- service_area_start  -->

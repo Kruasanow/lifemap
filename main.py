@@ -30,7 +30,7 @@ def admin_required(f):
     def decorated_function(*args, **kwargs):
         if not session.get('is_admin', False):
             flash('You need to be an admin to access this page.', 'danger')
-            return redirect(url_for('main_2'))
+            return redirect(url_for('index'))
         return f(*args, **kwargs)
     return decorated_function
 
@@ -117,7 +117,7 @@ def login():
             else:
                 session['is_admin'] = False
                 flash('Logged in successfully!', 'success')
-                return redirect(url_for('main_2'))
+                return redirect(url_for('index'))
 
         else:
             flash('Login failed! Check your username and password.', 'danger')
@@ -147,14 +147,14 @@ def main():
     extracted = [[t[1], t[2], t[3], replaced_string(t[5])] for t in data]
     return render_template('main.html', ext = extracted, users = users, username = username)
 
-@app.route('/main_2')
-@login_required
-def main_2():
-    try:
-        username = session['username']
-    except Exception:
-        username = 'Вы еще не вошли в аккаунт'
-    return render_template('main_2.html', username = username)    
+# @app.route('/main_2')
+# @login_required
+# def main_2():
+#     try:
+#         username = session['username']
+#     except Exception:
+#         username = 'Вы еще не вошли в аккаунт'
+#     return render_template('main_2.html', username = username)    
 
 @app.route('/article/<path:unique_identifier>')
 def article(unique_identifier):

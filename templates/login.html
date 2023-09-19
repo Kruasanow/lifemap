@@ -34,6 +34,42 @@
     </script>
 
     <style>
+        @keyframes floatAnimation {
+            0% {
+                background-position: 0% 0%;
+            }
+            10% {
+                background-position: 10% 10%;
+            }
+            20% {
+                background-position: 10% 90%;
+            }
+            30% {
+                background-position: 90% 10%;
+            }
+            40% {
+                background-position: 90% 90%;
+            }
+            50% {
+                background-position: 20% 20%;
+            }
+            60% {
+                background-position: 20% 80%;
+            }
+            70% {
+                background-position: 30% 70%;
+            }
+            80% {
+                background-position: 40% 60%;
+            }
+            90% {
+                background-position: 50% 50%;
+            }
+            100% {
+                background-position: 0% 0%;
+            }
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #fff;
@@ -46,6 +82,10 @@
             align-items: center;
             height: 50vh; /* высота экрана */
             background-color: #fdf4f4; /* светло-серый фон */
+            background-image: url("static/img/emely.jpg");
+            background-repeat: no-repeat;
+            background-size: 200%; /* увеличиваем фон */
+            animation: floatAnimation 30s infinite; /* Примените анимацию */
         }
 
         form {
@@ -54,6 +94,7 @@
             border: 2px solid #900; /* красная рамка */
             border-radius: 8px; /* закругленные углы */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* тень */
+            width: 300px;
         }
 
         input[type="submit"] {
@@ -73,27 +114,51 @@
         label, input {
             margin-bottom: 10px;
         }
+        label {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+        text-align: right; /* выровнять текст по правому краю */
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%; /* ширина поля ввода на всю ширину */
+            padding: 8px;
+            box-sizing: border-box; /* чтобы padding включался в общую ширину */
+            border: 1px solid #ccc; 
+            border-radius: 4px;
+        }
+
+        input[type="checkbox"] {
+            margin-left: 10px; /* добавить отступ слева для чекбокса */
+        }
     </style>
 
     <h2>Вход в систему</h2>
     <div class="login-container">
         <form action="/login" method="post">
-            <label for="username">Имя пользователя:</label>
-            <input type="text" id="username" name="username" required><br><br>
-
-            <label for="password">Пароль:</label>
-            <input type="password" id="password" name="password" required><br><br>
-
-            <label for="admin">Режим админа:</label>
-            <input type="checkbox" id="admin" name="admin" value="1"><br><br>
-
-            <label for="admin_key" id="admin_key_label" style="display: none;">Ключ:</label>
-            <input type="password" id="admin_key" name="admin_key" style="display: none;"><br><br>
-
+            <label for="username">Имя пользователя:
+                <input type="text" id="username" name="username" required>
+            </label>
+    
+            <label for="password">Пароль:
+                <input type="password" id="password" name="password" required>
+            </label>
+    
+            <label for="admin">Режим суперпользователя:
+                <input type="checkbox" id="admin" name="admin" value="1">
+            </label>
+    
+            <label for="admin_key" id="admin_key_label" style="display: none;">Ключ:
+                <input type="password" id="admin_key" name="admin_key" style="display: none;">
+            </label>
+    
             <input type="submit" value="Проникнуть">
         </form>
     </div>
+    
     <br>
     <a href="/register">Не зарегестрированы?<span style="color: rgb(210, 210, 210); font-size: small;"> ... пиздец</span> Нажмите тут!</a>
-
+    <br>
 {% endblock %}
