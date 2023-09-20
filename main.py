@@ -249,9 +249,9 @@ def createdescription():
             conn = get_db_connection()
             cur = conn.cursor()
 
-            cur.execute('INSERT INTO events (coords, title, short_description, full_description, photo, gallery_photos, rating, is_private, owner_name) '
+            cur.execute('INSERT INTO events (coords, title, short_description, full_description, photo, gallery_photos, rating, owner_name, is_private) '
                         'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)',
-                        (coords, title, short_description, full_description, photo_path, gallery_paths, rating, is_private, session['username']))
+                        (coords, title, short_description, full_description, photo_path, gallery_paths, rating, session['username'], is_private))
 
 
             conn.commit()

@@ -13,35 +13,189 @@
             </div>
         {% endif %}
     {% endwith %}
-    <div>
+
+    
+    <style>
+        @keyframes floatAnimation {
+            0% {
+                background-position: 0% 0%;
+            }
+            10% {
+                background-position: 10% 10%;
+            }
+            20% {
+                background-position: 10% 90%;
+            }
+            30% {
+                background-position: 90% 10%;
+            }
+            40% {
+                background-position: 90% 90%;
+            }
+            50% {
+                background-position: 20% 20%;
+            }
+            60% {
+                background-position: 20% 80%;
+            }
+            70% {
+                background-position: 30% 70%;
+            }
+            80% {
+                background-position: 40% 60%;
+            }
+            90% {
+                background-position: 50% 50%;
+            }
+            100% {
+                background-position: 0% 0%;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: #900; /* красный цвет текста */
+        }
+
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 90vh; /* высота экрана */
+            background-color: #fdf4f4; /* светло-серый фон */
+            background-image: url("static/img/emely.jpg");
+            background-repeat: no-repeat;
+            background-size: 200%; /* увеличиваем фон */
+            animation: floatAnimation 30s infinite; /* Примените анимацию */
+        }
+
+        form {
+            background-color: #fff; /* белый фон */
+            padding: 20px;
+            border: 2px solid #900; /* красная рамка */
+            border-radius: 8px; /* закругленные углы */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* тень */
+            width: 50vw;
+        }
+
+        input[type="submit"] {
+            background-color: #900; /* красный фон */
+            color: #fff; /* белый текст */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px; /* закругленные углы */
+            cursor: pointer; /* указатель руки при наведении */
+            transition: background-color 0.3s; /* плавное изменение фона */
+        }
+
+        input[type="submit"]:hover {
+            background-color: #700; /* темно-красный фон при наведении */
+        }
+
+        label, input {
+            margin-bottom: 10px;
+        }
+        label {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+        text-align: right; /* выровнять текст по правому краю */
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%; /* ширина поля ввода на всю ширину */
+            padding: 8px;
+            box-sizing: border-box; /* чтобы padding включался в общую ширину */
+            border: 1px solid #ccc; 
+            border-radius: 4px;
+        }
+
+        input[type="checkbox"] {
+            margin-left: 10px; /* добавить отступ слева для чекбокса */
+        }
+
+        .textarea-full-story {
+            width: 100%;
+            height: 6em;  /* или другое значение, которое вы хотите установить */
+        }
+
+        .input-short-description {
+            width: 100%;
+        }
+
+        .hidden-file {
+            display: none;
+        }
+
+        .file-label {
+            padding: 10px 20px;
+            background-color: #900;
+            color: white;
+            cursor: pointer;
+        }
+
+        .file-upload-wrapper > span {
+            margin-left: 10px;
+        }
+    </style>
+
+    <script>
+        document.getElementById('eventPhotoInput').addEventListener('change', function() {
+            const chosenFile = this.files[0];
+            if (chosenFile) {
+                document.getElementById('eventPhotoChosenFile').textContent = chosenFile.name;
+            }
+        });
+
+        document.getElementById('multiplePhotosInput').addEventListener('change', function() {
+            const chosenFiles = this.files;
+            if (chosenFiles.length) {
+                document.getElementById('multiplePhotosChosenFile').textContent = `${chosenFiles.length} файл(ов) выбрано`;
+            }
+        });
+    </script>
+
         <h1>Форма события</h1>
+    <div class="login-container">
+
         <form method="POST" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
+
+            <label for="{{ form.title.id }}">{{ form.title.label }}</label>
+            {{ form.title(class="input-style") }}<br>
+
+            <label for="{{ form.short_description.id }}">{{ form.short_description.label }}</label>
+            {{ form.short_description(class="input-style input-short-description") }}<br>
             
-            <label>{{ form.title.label }}</label>
-            {{ form.title() }}<br>
+            <label for="{{ form.full_story.id }}">{{ form.full_story.label }}</label>
+            {{ form.full_story(class="input-style textarea-full-story") }}<br>
+            <br>
+            <div class="file-upload-wrapper">
+                {{ form.event_photo(id="eventPhotoInput", class="hidden-file") }}
+                <label for="eventPhotoInput" class="file-label">Выбрать фото события</label>
+                <span id="eventPhotoChosenFile"></span>
+            </div>
             
-            <label>{{ form.short_description.label }}</label>
-            {{ form.short_description() }}<br>
-
-            <label>{{ form.full_story.label }}</label>
-            {{ form.full_story() }}<br>
-
-            <label>{{ form.event_photo.label }}</label>
-            {{ form.event_photo() }}<br>
-
-            <label>{{ form.multiple_photos.label }}</label>
-            {{ form.multiple_photos() }}<br>
-
-            <label>{{ form.rating.label }}</label>
-            {{ form.rating() }}<br>
+            <div class="file-upload-wrapper">
+                {{ form.multiple_photos(id="multiplePhotosInput", class="hidden-file") }}
+                <label for="multiplePhotosInput" class="file-label">Выбрать фотографии</label>
+                <span id="multiplePhotosChosenFile"></span>
+            </div>
             
-            <label>{{ form.is_private.label }}</label>
+
+            <label for="{{ form.rating.id }}">{{ form.rating.label }}</label>
+            {{ form.rating(class="input-style") }}<br>
+
+            <label for="{{ form.is_private.id }}">{{ form.is_private.label }}</label>
             {{ form.is_private() }}<br>
-
-            <button type="submit">Отправить</button>
+            <br>
+            Выбери координату на карте, а только потом : 
+            <input type="submit" value="Создать событие">
         </form>
     </div>
+
 
     <style>
         /* Стиль для экранов с шириной менее 768px (обычно это мобильные устройства) */
