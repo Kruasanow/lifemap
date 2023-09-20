@@ -203,6 +203,7 @@ def createdescription():
         short_description = form.short_description.data
         full_description = form.full_story.data
         rating = form.rating.data
+        is_private = 1 if form.is_private.data else 0
 
         # Создаем основную директорию для события
         user_folder = os.path.join(app.config['UPLOAD_FOLDER'], session['username'])
@@ -248,9 +249,9 @@ def createdescription():
             conn = get_db_connection()
             cur = conn.cursor()
 
-            cur.execute('INSERT INTO events (coords, title, short_description, full_description, photo, gallery_photos, rating, owner_name) '
-                        'VALUES (%s, %s, %s, %s, %s, %s, %s, %s)',
-                        (coords, title, short_description, full_description, photo_path, gallery_paths, rating, session['username']))
+            cur.execute('INSERT INTO events (coords, title, short_description, full_description, photo, gallery_photos, rating, is_private, owner_name) '
+                        'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                        (coords, title, short_description, full_description, photo_path, gallery_paths, rating, is_private, session['username']))
 
 
             conn.commit()
@@ -258,6 +259,7 @@ def createdescription():
             conn.close()
         except Exception:
             flash('Выберите координаты')
+            print("kakaya-to hueta" + str(is_private))
         # Вставляем данные в базу данных
 
 

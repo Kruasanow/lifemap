@@ -25,10 +25,12 @@ try:
                         'photo TEXT,'
                         'gallery_photos TEXT[],'
                         'rating INTEGER NOT NULL,'
+                        'is_private INTEGER NOT NULL,'
                         'owner_name TEXT NOT NULL,'
                         'date_added date DEFAULT CURRENT_TIMESTAMP);'
                 )
 except Exception:
+      print('hui tebe a ne events')
       pass
 # cur.execute('DROP TABLE IF EXISTS users;')
 try:
@@ -42,7 +44,20 @@ try:
                                         'date_added date DEFAULT CURRENT_TIMESTAMP);'
                                         )
 except Exception:
+       print('hui tebe a ne users')
        pass
+
+# Создаем таблицу user_friends
+try:
+    cur.execute('CREATE TABLE user_friends (id SERIAL PRIMARY KEY,'
+                                   'username TEXT NOT NULL,'
+                                   'friend TEXT NOT NULL,'
+                                   'private BOOLEAN NOT NULL DEFAULT FALSE,'
+                                   'date_added date DEFAULT CURRENT_TIMESTAMP);'
+                                   )
+except Exception:
+    print('Не удалось создать таблицу user_friends')
+    pass
 conn.commit()
 
 cur.close()

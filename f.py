@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, FileField, MultipleFileField, IntegerField, validators
+from wtforms import StringField, TextAreaField, FileField, MultipleFileField, IntegerField, validators, BooleanField
 from wtforms.validators import DataRequired
 
 class EventForm(FlaskForm):
@@ -9,6 +9,7 @@ class EventForm(FlaskForm):
     event_photo = FileField('Фото события')
     multiple_photos = MultipleFileField('Выберите до 20 фотографий', render_kw={"multiple": True})
     rating = IntegerField('Рейтинг', validators=[DataRequired(), validators.NumberRange(min=1, max=10)])
+    is_private = BooleanField('Название вашего чекбокса')  
 
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
@@ -20,3 +21,8 @@ def replaced_string(stroka):
     except Exception:
         left, right = '', ''
     return [left, right]
+
+
+            # <label for="admin_key" id="admin_key_label" style="display: none;">Ключ:
+            #     <input type="password" id="admin_key" name="admin_key" style="display: none;">
+            # </label>
