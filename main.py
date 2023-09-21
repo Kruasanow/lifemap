@@ -164,7 +164,8 @@ def article(unique_identifier):
         username = 'Вы еще не вошли в аккаунт'
     # Разбить unique_identifier на две части: имя пользователя и название события
     username, event_title = unique_identifier.split("_", 1)
-    
+    print(unique_identifier)
+
     cur = get_db_connection().cursor()
     cur.execute('SELECT * FROM events WHERE owner_name = %s AND title = %s;', (username, event_title))
     event = cur.fetchone()
