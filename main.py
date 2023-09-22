@@ -7,7 +7,7 @@ from flask_bcrypt import Bcrypt
 from init_db import get_db_connection
 from functools import wraps
 from sensetive_data import admin_key, app_secret_key
-from f import EventForm, allowed_file, replaced_string
+from f import EventForm, allowed_file, replaced_string, check_admin
 
 app = Flask(__name__)
 app.secret_key = app_secret_key  # Random secret key for sessions
@@ -41,6 +41,20 @@ def switch_user():
     session['username'] = new_username
     return redirect(url_for('main'))
 
+@app.route('/delete_event/<int:event_id>')
+@admin_required
+@login_required
+def delete_event(event_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM events WHERE id = %s;", (event_id,))
+    conn.commit()
+    cur.close()
+    conn.close()
+    flash('Событие успешно удалено!', 'success')
+    return redirect(url_for('cabinet'))
+
+
 @app.before_request
 def restore_original_username():
     # Проверяем, является ли конечная точка не 'main' и есть ли в сессии 'original_username'
@@ -66,7 +80,7 @@ def register():
         existing_user = cur.fetchone()
 
         if existing_user:
-            flash('Email or username already exists. Please choose another.', 'danger')
+            flash('E-mail и/или никнейм уже существуют. Ты не оригинален.', 'danger')
             cur.close()
             conn.close()
             return render_template('register.html')
@@ -78,7 +92,7 @@ def register():
         cur.close()
         conn.close()
 
-        flash('Registered successfully! Please login.', 'success')
+        flash('Успешная регистрация! Выполните вход.', 'success')
         return redirect(url_for('login'))
 
     return render_template('register.html')
@@ -113,21 +127,23 @@ def login():
             # Проверка на наличие прав админа
             if admin_key == ADMIN_KEY:
                 session['is_admin'] = True
-                flash('Logged in as admin successfully!', 'success')
+                flash('Успешный вход в режиме суперпользователя', 'success')
                 return redirect(url_for('main'))
             else:
                 session['is_admin'] = False
-                flash('Logged in successfully!', 'success')
+                flash('Успешный вход в режиме пользователя!', 'success')
                 return redirect(url_for('index'))
 
         else:
-            flash('Login failed! Check your username and password.', 'danger')
+            flash('Ошибка входа! Проверьте никнейм и/или пароль.', 'danger')
             return redirect(url_for('login'))
 
-    return render_template('login.html', username = username)
+    return render_template('login.html', username = username, admin_mode = check_admin())
 
 
 @app.route('/addfriend', methods=['GET', 'POST'])
+@admin_required
+@login_required
 def addfriend():
     if request.method == 'POST':
         friend_name = request.form['username']
@@ -184,7 +200,7 @@ def addfriend():
 
         return redirect(url_for('addfriend'))
 
-    return render_template('addfriend.html')
+    return render_template('addfriend.html', admin_mode = check_admin())
 
 
 
@@ -209,7 +225,7 @@ def main():
     data = cur.fetchall()
 
     extracted = [[t[1], t[2], t[3], replaced_string(t[5])] for t in data]
-    return render_template('main.html', ext = extracted, users = users, username = username)
+    return render_template('main.html', ext = extracted, users = users, username = username, admin_banner = check_admin())
 
 
 @app.route('/cabinet')
@@ -258,10 +274,16 @@ def cabinet():
     cur.execute("SELECT COUNT(*) FROM events WHERE owner_name = %s AND is_private = 1;", (username,))
     private_events_count = cur.fetchone()[0]
 
+    cur.execute("SELECT id, title, photo, short_description FROM events WHERE owner_name = %s;", (username,))
+    events = cur.fetchall()
+
+
     cur.close()
     conn.close()
 
-    return render_template('cabinet.html', 
+    return render_template('cabinet.html',
+                           admin_mode = check_admin(),
+                           events = events,
                            username=username, 
                            total_friends=total_friends, 
                            close_friends=close_friends, 
@@ -289,7 +311,7 @@ def article(unique_identifier):
     event = cur.fetchone()
     if not event:
         return "Статья не найдена", 404
-    return render_template('article.html', event=event, username = username)
+    return render_template('article.html', event=event, username = username, admin_mode = check_admin())
 
 @app.route('/')
 @login_required
@@ -307,7 +329,7 @@ def index():
         # print(t)
     extracted = [[t[1], t[2], t[3], replaced_string(t[5])] for t in data]
     # print(extracted)
-    return render_template('index.html', ext = extracted, username = username)
+    return render_template('index.html', ext = extracted, username = username, admin_mode = check_admin())
 
 @app.route('/createdescription', methods=['GET', 'POST'])
 @login_required
@@ -400,7 +422,7 @@ def save_coordinates():
 @app.route('/button_pressed', methods=['POST'])
 def button_pressed():
     # Здесь выполняется обработка нажатия кнопки
-    flash('Button was pressed!')
+    # flash('Button was pressed!')
     return redirect(url_for('createdescription'))
 
 if __name__ == '__main__':

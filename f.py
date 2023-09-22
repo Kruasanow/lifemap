@@ -26,3 +26,11 @@ def replaced_string(stroka):
             # <label for="admin_key" id="admin_key_label" style="display: none;">Ключ:
             #     <input type="password" id="admin_key" name="admin_key" style="display: none;">
             # </label>
+
+def check_admin():
+    from flask import session
+    if session['is_admin'] == True:
+        admin_banner = '[Суперпользователь]'
+    else:
+        admin_banner = '[Пользователь]'
+    return admin_banner
