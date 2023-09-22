@@ -41,6 +41,7 @@ try:
                                         'email TEXT NOT NULL,'
                                         'admin INTEGER NOT NULL,'
                                         'passwd TEXT NOT NULL,'
+                                        'secret TEXT NOT NULL,'
                                         'date_added date DEFAULT CURRENT_TIMESTAMP);'
                                         )
 except Exception:

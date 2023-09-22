@@ -56,6 +56,7 @@ def register():
         admin = request.form.get('admin', 0)
         username = request.form['username']
         password = request.form['password']
+        secret = request.form['secret']
 
         conn = get_db_connection()  # Использование функции для установки соединения
         cur = conn.cursor()
@@ -71,8 +72,8 @@ def register():
             return render_template('register.html')
 
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-        cur.execute("INSERT INTO users (username, fname, sname, email, admin, passwd) VALUES (%s, %s, %s, %s, %s, %s)",
-                    (username, fname, sname, email, admin, hashed_password))
+        cur.execute("INSERT INTO users (username, fname, sname, email, admin, passwd, secret) VALUES (%s, %s, %s, %s, %s, %s, %s)",
+                    (username, fname, sname, email, admin, hashed_password, secret))
         conn.commit()
         cur.close()
         conn.close()
@@ -125,6 +126,69 @@ def login():
 
     return render_template('login.html', username = username)
 
+
+@app.route('/addfriend', methods=['GET', 'POST'])
+def addfriend():
+    if request.method == 'POST':
+        friend_name = request.form['username']
+        check_email = request.form['password']
+        admin_key = request.form['admin_key']
+        current_session_user = session['username']
+
+        conn = get_db_connection()  # Использование функции для установки соединения
+        cur = conn.cursor()
+        try:
+            cur.execute('SELECT email, secret FROM users WHERE username = %s;', (friend_name,))
+            result = cur.fetchall()
+
+            # Если результат не пустой
+            if result:
+                email, secret = result[0]
+
+                # Проверка на существование друга в user_friends
+                cur.execute('SELECT private FROM user_friends WHERE username = %s AND friend = %s;', (current_session_user, friend_name))
+                friend_existence = cur.fetchone()
+
+                if email == check_email:
+                    if secret == admin_key:
+                        private_value = True
+                        message = 'Added friend with full access!'
+
+                        # Если друг уже существует и private был False, обновляем его значение
+                        if friend_existence and not friend_existence[0]:
+                            cur.execute('UPDATE user_friends SET private = %s WHERE username = %s AND friend = %s;', (True, current_session_user, friend_name))
+                        # Иначе добавляем друга в список
+                        elif not friend_existence:
+                            cur.execute("INSERT INTO user_friends (username, friend, private) VALUES (%s, %s, %s)", (current_session_user, friend_name, private_value))
+
+                    else:
+                        private_value = False
+                        message = 'Added friend with restricted access!'
+
+                        # Если друг не существует, добавляем его в список
+                        if not friend_existence:
+                            cur.execute("INSERT INTO user_friends (username, friend, private) VALUES (%s, %s, %s)", (current_session_user, friend_name, private_value))
+
+                conn.commit()
+
+                flash(message, 'success')
+                
+            else:
+                flash('No such user found!', 'error')
+
+        except Exception as e:
+            print('Error:', e)
+            flash('Something went wrong!', 'error')
+        cur.close()
+        conn.close()
+
+        return redirect(url_for('addfriend'))
+
+    return render_template('addfriend.html')
+
+
+
+
 @app.route('/main')
 @login_required
 @admin_required
@@ -147,14 +211,68 @@ def main():
     extracted = [[t[1], t[2], t[3], replaced_string(t[5])] for t in data]
     return render_template('main.html', ext = extracted, users = users, username = username)
 
-# @app.route('/main_2')
-# @login_required
-# def main_2():
-#     try:
-#         username = session['username']
-#     except Exception:
-#         username = 'Вы еще не вошли в аккаунт'
-#     return render_template('main_2.html', username = username)    
+
+@app.route('/cabinet')
+@login_required
+def cabinet():
+    username = session['username']
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    # Количество друзей
+    cur.execute("SELECT COUNT(*) FROM user_friends WHERE username = %s;", (username,))
+    total_friends = cur.fetchone()[0]
+
+    # Количество близких друзей
+    cur.execute("SELECT COUNT(*) FROM user_friends WHERE username = %s AND private = TRUE;", (username,))
+    close_friends = cur.fetchone()[0]
+
+    # Информация о пользователе
+    cur.execute("SELECT fname, sname, email, date_added FROM users WHERE username = %s;", (username,))
+    user_data = cur.fetchone()
+    full_name = f"{user_data[0]} {user_data[1]}"
+    email = user_data[2]
+    date_registered = user_data[3]
+
+    # Количество событий пользователя
+    cur.execute("SELECT COUNT(*) FROM events WHERE owner_name = %s;", (username,))
+    total_events = cur.fetchone()[0]
+
+    # Количество фотографий
+    cur.execute("SELECT SUM(ARRAY_LENGTH(gallery_photos, 1)) FROM events WHERE owner_name = %s;", (username,))
+    total_photos = cur.fetchone()[0] or 0  # Если возвращает None
+
+    # Средний рейтинг
+    cur.execute("SELECT AVG(rating) FROM events WHERE owner_name = %s;", (username,))
+    avg_rating_raw = cur.fetchone()[0]
+    avg_rating = round(avg_rating_raw, 2) if avg_rating_raw is not None else 0
+
+    # Статистика рейтинга
+    ratings_stats = {}
+    for i in range(1, 11):  # Если у вас рейтинг от 1 до 5
+        cur.execute("SELECT COUNT(*) FROM events WHERE owner_name = %s AND rating = %s;", (username, i))
+        ratings_stats[i] = cur.fetchone()[0]
+
+    # Приватные события
+    cur.execute("SELECT COUNT(*) FROM events WHERE owner_name = %s AND is_private = 1;", (username,))
+    private_events_count = cur.fetchone()[0]
+
+    cur.close()
+    conn.close()
+
+    return render_template('cabinet.html', 
+                           username=username, 
+                           total_friends=total_friends, 
+                           close_friends=close_friends, 
+                           full_name=full_name, 
+                           email=email, 
+                           date_registered=date_registered, 
+                           total_events=total_events, 
+                           total_photos=total_photos, 
+                           avg_rating=avg_rating, 
+                           ratings_stats=ratings_stats,
+                           private_events_count=private_events_count)
 
 @app.route('/article/<path:unique_identifier>')
 def article(unique_identifier):

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Статистика пользователя{% endblock %}
+
+{% block content %}
+<h2>Статистика пользователя {{ username }}</h2>
+<p><strong>Имя пользователя:</strong> {{ username }}</p>
+<p><strong>Полное имя:</strong> {{ full_name }}</p>
+<p><strong>Email:</strong> {{ email }}</p>
+<p><strong>Дата регистрации:</strong> {{ date_registered }}</p>
+<p><strong>Общее количество друзей:</strong> {{ total_friends }}</p>
+<p><strong>Количество близких друзей:</strong> {{ close_friends }}</p>
+<p><strong>Общее количество событий:</strong> {{ total_events }}</p>
+<p><strong>Общее количество фотографий:</strong> {{ total_photos }}</p>
+<p><strong>Средний рейтинг историй:</strong> {{ avg_rating }}</p>
+<p><strong>Распределение рейтингов:</strong></p>
+<ul>
+    {% for rate, count in ratings_stats.items() %}
+        <li><strong>{{ rate }} звезда:</strong> {{ count }} событий</li>
+    {% endfor %}
+</ul>
+<p><strong>Приватных событий:</strong> {{ private_events_count }}</p>
+{% endblock %}
