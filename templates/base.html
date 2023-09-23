@@ -54,12 +54,19 @@
     <script src="{{ url_for('static', filename='js/owl.carousel.min.js')}}" type="text/javascript"></script>
     <style>
         img.roundedPNG {
-            width: 10vw;
+            width: 25vw;  /* Стиль для больших экранов */
             height: auto;
-            border-radius: 50%; /* Это убедится, что изображение круглое, если вдруг оно не было таковым изначально */
-            display: block;     /* Подстраховка для корректного отображения на всех браузерах */
+            display: block;
+        }
+    
+        /* Стиль для экранов с шириной менее 768px (обычно это мобильные устройства) */
+        @media (max-width: 767px) {
+            img.roundedPNG {
+                width: 50vw;  /* Стиль для мобильных устройств */
+            }
         }
     </style>
+    
     <header>
         <div class="header-area ">
             <div class="header-top_area">
@@ -92,13 +99,44 @@
                     </div>
                 </div>
             </div>
+            <style>
+                #navigation {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: flex-end; /* выравнивание элементов по правому краю */
+                    padding: 0;
+                    margin: 0;
+                }
+            
+                .menu-row {
+                    display: flex;
+                    justify-content: flex-end; /* выравнивание элементов по правому краю */
+                    width: 60%; /* установите полную ширину, чтобы каждый ряд занимал всю ширину родительского элемента */
+                }
+            
+                li {
+                    margin-left: 10px; /* минимальный отступ между элементами */
+                }
+            
+                /* стили для подменю */
+                .submenu {
+                    display: none;
+                }
+            
+                li:hover .submenu {
+                    display: block;
+                    position: absolute;
+                    right: 0;
+                }
+            </style>
+            
             <div id="sticky-header" class="main-header-area">
                 <div class="container">
                     <div class="row align-items-center">
                         <div class="col-xl-3 col-lg-3">
                             <div class="logo">
                                 <a href="#">
-                                    <img src="{{ url_for('static', filename='img/logotype.png')}}" class="roundedPNG" alt="">
+                                    <img src="{{ url_for('static', filename='img/logotype1.png')}}" class="roundedPNG" alt="hui a ne logo">
                                 </a>
                             </div>
                         </div>
@@ -106,18 +144,24 @@
                             <div class="main-menu  d-none d-lg-block">
                                 <nav>
                                     <ul id="navigation">
-                                        <li><a  href="/login">Вход</a></li>
-                                        <li><a href="/register">Регистрация</a></li>
-                                        <li><a href="/addfriend">Добавить друга</a></li>
-                                        <li><a href="/main">На главную</a></li>
-                                        <li><a href="/login">Медиа <i class="ti-angle-down"></i></a>
-                                            <ul class="submenu">
-                                                <li><a href="https://media.tenor.com/UXLMBxxNUsQAAAAd/papich.gif">Личная жизнь</a></li>
-                                                <li><a href="https://otkritkis.com/wp-content/uploads/2022/06/mwrkn.gif">Психология</a></li>
-                                                <li><a href="https://otkritkis.com/wp-content/uploads/2022/06/mwrj4.gif">Досуг</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="/cabinet">{{username}} {{admin_mode}}</a></li>
+                                        <div class="menu-row">
+                                            <li><a  href="/login">Вход</a></li>
+                                            <li><a href="/register">Регистрация</a></li>
+                                            <li><a href="/addfriend">Добавить друга</a></li>
+                                            <li><a href="/main">На главную</a></li>
+                                        </div>
+                                        <div class="menu-row">
+                                            <li><a href="/login">Медиа <i class="ti-angle-down"></i></a>
+                                                <ul class="submenu">
+                                                    <li><a href="https://media.tenor.com/UXLMBxxNUsQAAAAd/papich.gif">Личная жизнь</a></li>
+                                                    <li><a href="https://otkritkis.com/wp-content/uploads/2022/06/mwrkn.gif">Психология</a></li>
+                                                    <li><a href="https://otkritkis.com/wp-content/uploads/2022/06/mwrj4.gif">Досуг</a></li>
+                                                </ul>
+                                            </li>
+                                            <li><a href="/cabinet">{{username}} {{admin_mode}}</a></li>
+                                        </div>
+                                    </ul>
+                                        </div>
                                     </ul>
                                 </nav>
                             </div>

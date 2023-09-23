@@ -232,11 +232,11 @@ def addfriend():
                 flash(message, 'success')
                 
             else:
-                flash('No such user found!', 'error')
+                flash('Такого пользователя не существует', 'error')
 
         except Exception as e:
             print('Error:', e)
-            flash('Something went wrong!', 'error')
+            flash('Что-то пошло не так (я х*й знает)', 'error')
         cur.close()
         conn.close()
 

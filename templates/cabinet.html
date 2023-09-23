@@ -4,48 +4,214 @@
 
 {% block content %}
 {{username}} - {{admin_mode}}
-<h2>Статистика пользователя {{ username }}</h2>
-<p><strong>Имя пользователя:</strong> {{ username }}</p>
-<p><strong>Полное имя:</strong> {{ full_name }}</p>
-<p><strong>Email:</strong> {{ email }}</p>
-<p><strong>Дата регистрации:</strong> {{ date_registered }}</p>
-<p><strong>Общее количество друзей:</strong> {{ total_friends }}</p>
-<p><strong>Количество близких друзей:</strong> {{ close_friends }}</p>
-<p><strong>Общее количество событий:</strong> {{ total_events }}</p>
-<p><strong>Общее количество фотографий:</strong> {{ total_photos }}</p>
-<p><strong>Средний рейтинг историй:</strong> {{ avg_rating }}</p>
-<p><strong>Распределение рейтингов:</strong></p>
-<ul>
-    {% for rate, count in ratings_stats.items() %}
-        <li><strong>{{ rate }} звезда:</strong> {{ count }} событий</li>
-    {% endfor %}
-</ul>
-<p><strong>Приватных событий:</strong> {{ private_events_count }}</p>
 
+<style>
+    .info-box {
+        width: 100%; /* по умолчанию 100% для мобильных */
+        border: 1px solid #ddd;
+        padding: 1em;
+        margin: 0.5em 0;
+        box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+        display: inline-block;
+        vertical-align: top;
+        box-sizing: border-box; /* Это учитывает внутренние отступы и рамку в общей ширине элемента */
+    }
+
+    .info-box p {
+        margin: 0.5em 0;
+    }
+
+    .info-box strong {
+        display: block;
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+    /* Для планшетов */
+    @media (min-width: 768px) and (max-width: 1023px) {
+        .info-box {
+            width: 50%;
+        }
+    }
+
+    /* Для десктопов */
+    @media (min-width: 1024px) {
+        .info-box {
+            width: 33%;
+        }
+    }
+</style>
+<style>
+    .ratings-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;  /* равномерное распределение элементов с равными интервалами между ними */
+        align-items: center;
+        margin-top: 20px;
+    }
+
+    .rating-item {
+        margin: 10px;
+        padding: 5px 15px;
+        background-color: #f5f5f5;   /* светло-серый цвет фона */
+        border-radius: 5px;  /* закругленные углы */
+    }
+
+    @media (max-width: 767px) {   /* стили для мобильных устройств */
+        .rating-item {
+            flex-basis: 100%;  /* делает элемент шириной 100% */
+        }
+    }
+
+    @media (min-width: 768px) {   /* стили для десктопов и планшетов */
+        .rating-item {
+            flex-basis: calc(33% - 20px);  /* делает элемент шириной 33.33% минус 20px марджина */
+        }
+    }
+    .star {
+        color: gold; /* цвет звезды */
+    }
+</style>
+
+<h2>Статистика пользователя {{ username }}</h2>
+
+<div class="info-box">
+    <p>Имя пользователя:</p>
+    <strong>{{ username }}</strong>
+</div>
+
+<div class="info-box">
+    <p>Полное имя:</p>
+    <strong>{{ full_name }}</strong>
+</div>
+
+<div class="info-box">
+    <p>Email:</p>
+    <strong>{{ email }}</strong>
+</div>
+
+<div class="info-box">
+    <p>Дата регистрации:</p>
+    <strong>{{ date_registered }}</strong>
+</div>
+
+<div class="info-box">
+    <p>Общее количество друзей:</p>
+    <strong>{{ total_friends }}</strong>
+</div>
+
+<div class="info-box">
+    <p>Количество близких друзей:</p>
+    <strong>{{ close_friends }}</strong>
+</div>
+
+<div class="info-box">
+    <p>Общее количество событий:</p>
+    <strong>{{ total_events }}</strong>
+</div>
+
+<div class="info-box">
+    <p>Общее количество фотографий:</p>
+    <strong>{{ total_photos }}</strong>
+</div>
+
+<div class="info-box">
+    <p>Средний рейтинг историй:</p>
+    <strong>{{ avg_rating }}</strong>
+</div>
+
+<div class="info-box">
+    <p>Приватных событий:</p>
+    <strong>{{ private_events_count }}</strong>
+</div>
+
+<p><strong>Распределение рейтингов событий:</strong></p>
+<div class="ratings-container">
+    {% for rate, count in ratings_stats.items() %}
+        <div class="rating-item">
+            <strong>
+                {% for _ in range(rate) %}
+                    <span class="star">★</span> <!-- символ звезды -->
+                {% endfor %}
+            </strong> 
+            : {{ count }}
+        </div>
+    {% endfor %}
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+<style>
+    .owl-nav button.owl-prev, 
+    .owl-nav button.owl-next {
+        font-size: 2rem;
+        color: #333;
+    }
+    
+    .owl-nav button.owl-prev:hover, 
+    .owl-nav button.owl-next:hover {
+        color: #666;
+    }
+    
+    .owl-nav button.owl-prev {
+        margin-right: 10px;
+    }
+    
+    .owl-nav button.owl-next {
+        margin-left: 10px;
+    }
+
+    .owl-carousel .item {
+        background-color: #f4f4f4;
+        padding: 15px;
+        margin: 10px;
+        border: 1px solid #d4d4d4;
+        text-align: center;
+    }
+</style>
+
+<script>
+    $(document).ready(function(){
+        $(".owl-carousel").owlCarousel({
+            loop: true,
+            margin: 10,
+            nav: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                768: {
+                    items: 2
+                },
+                1024: {
+                    items: 3
+                }
+            }
+        });
+    });
+</script>
+            
 <h3>Ваши события:</h3>
-{% for event in events %}
-    <div class="event-item">
-        <h4>{{ event[1] }}</h4>
-        <!-- <img src="{{ url_for('static', filename='uploads/' + event[2]) }}" alt="{{ event[1] }}"> -->
-        <p>{{ event[3] }}</p>
-        <a href="{{ url_for('delete_event', event_id=event[0]) }}">Удалить</a>
-    </div>
-{% endfor %}
+<div class="owl-carousel">
+    {% for event in events %}
+        <div class="item">
+            <h4>{{ event[1] }}</h4>
+            <p>{{ event[3] }}</p>
+            <a href="{{ url_for('delete_event', event_id=event[0]) }}">Удалить</a>
+        </div>
+    {% endfor %}
+</div>
+
 <h3>Ваши друзья:</h3>
-<table>
-    <thead>
-        <tr>
-            <th>Имя друга</th>
-            <th>Близкий друг</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for friend in friends %}
-        <tr>
-            <td>{{ friend[0] }}</td>
-            <td>{% if friend[1] %} Да {% else %} Нет {% endif %}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="owl-carousel">
+    {% for friend in friends %}
+        <div class="item">
+            <p style="font-weight: normal;">Имя друга: <strong>{{ friend[0] }}</strong></p>
+            <p style="font-weight: normal;">Близкий друг: <strong>{% if friend[1] %} Да {% else %} Нет {% endif %}</strong></p>        
+        </div>
+    {% endfor %}
+</div>
 {% endblock %}

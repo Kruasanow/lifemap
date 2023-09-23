@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 
 {% block title %}Main page{% endblock %}
@@ -6,23 +5,55 @@
 {% block content %}
 {{username}} - {{admin_mode}}
 
+<style>
+    .main-image img {
+        max-width: 75vw;
+        display: block;
+    }
+
+    .gallery {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .gallery img {
+        max-width: 33vw;
+        margin-bottom: 1rem;
+    }
+
+    h1 {
+        font-size: 1.5em;  /* Увеличиваем размер шрифта для заголовка в 2 раза */
+    }
+
+    /* Увеличиваем размер шрифта для краткого и полного описания в 2 раза */
+    p.description, p.full-description {
+        font-size: 1.5em;
+    }
+</style>
+
 <h1>{{ event[2] }}</h1> <!-- Заголовок статьи -->
-<p>{{ event[3] }}</p> <!-- Краткое описание -->
+<p class="description">{{ event[3] }}</p> <!-- Краткое описание -->
 
 <!-- Проверка на существование изображения -->
-{% if event[5] %}
-    <img src="{{ url_for('static', filename='uploads/' + event[8] + '/' + event[5].replace('\\', '/')) }}" alt="Главное изображение">
-{% else %}
-    <p>Изображение отсутствует.</p>
-{% endif %}
+<div class="main-image">
+    {% if event[5] %}
+        <img src="{{ url_for('static', filename='uploads/' + event[8] + '/' + event[5].replace('\\', '/')) }}" alt="Главное изображение">
+    {% else %}
+        <p>Изображение отсутствует.</p>
+    {% endif %}
+</div>
 
-<p>{{ event[4] }}</p> <!-- Полное описание -->
+<p class="full-description">{{ event[4] }}</p> <!-- Полное описание -->
+
 
 <!-- Галерея карусель -->
 <div class="gallery">
     {% if event[6] %}
         {% for photo in event[6] %}
-            <img src="{{ url_for('static', filename='uploads/' + event[8] + '/' + photo.replace('\\', '/')) }}" alt="Галерея изображений">
+            <div class="gallery-item">
+                <img src="{{ url_for('static', filename='uploads/' + event[8] + '/' + photo.replace('\\', '/')) }}" alt="Галерея изображений">
+            </div>
         {% endfor %}
     {% else %}
         <p>Галерея изображений отсутствует.</p>
