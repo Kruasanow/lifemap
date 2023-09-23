@@ -196,7 +196,8 @@
                             [6909, 4727]
                         ];
                     
-                        L.imageOverlay("{{ url_for('static', filename='img/ready_map2.png') }}", bounds).addTo(map);
+                        L.imageOverlay("{{ url_for('static', filename='img/maps/' + cmap) }}", bounds).addTo(map);
+
                         map.fitBounds(bounds);
                     
                         var currentCircle = null;

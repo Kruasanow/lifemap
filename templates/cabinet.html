@@ -31,4 +31,21 @@
         <a href="{{ url_for('delete_event', event_id=event[0]) }}">Удалить</a>
     </div>
 {% endfor %}
+<h3>Ваши друзья:</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Имя друга</th>
+            <th>Близкий друг</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for friend in friends %}
+        <tr>
+            <td>{{ friend[0] }}</td>
+            <td>{% if friend[1] %} Да {% else %} Нет {% endif %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

@@ -4,6 +4,7 @@
 
 {% block content %}
 {{username}} {{admin_banner}}
+<h2>Страница ваших событий</h2>
     <!-- slider_area_start -->
     <div class="slider_area">
         <div class="single_slider slider_bg_1 d-flex align-items-center">
@@ -11,28 +12,45 @@
                 <div class="row">
                     <div class="col-lg-5 col-md-6">
                         <div class="slider_text">
-                            <h3>We Care <br> <span>Your Pets</span></h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur <br> adipiscing elit, sed do eiusmod.</p>
-                            <a href="contact.html" class="boxed-btn4">Contact Us</a>
+                            <h3>Мы сохраним <br> <span>Твои воспоминанния</span></h3>
+                            <p>Самые яркие эмоции. <br> Самое лучшее настроение.</p><br>
+                            <a href="/createdescription" class="boxed-btn4">Создать событие</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="dog_thumb d-none d-lg-block">
-                <img src="{{ url_for('static', filename='img/banner/dog.png')}}" alt="">
+                <img src="{{ url_for('static', filename='img/banner/zalupa3.png')}}" alt="">
             </div>
         </div>
     </div>
-    <!-- slider_area_end -->
 
-    <form action="/switch_user" method="post">
+    <!-- <form action="/switch_user" method="post">
         <select name="username">
             {% for user in users %}
                 <option value="{{ user }}">{{ user }}</option>
             {% endfor %}
         </select>
         <input type="submit" value="Switch User">
+    </form> -->
+
+    <form action="/switch_user" method="post">
+        <select name="username">
+            {% for friend in users %}
+                <option value="{{ friend }}">{{ friend }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Switch User">
     </form>
+
+    <!-- <form action="/switch_map_main" method="post">
+        <select name="map_main">
+            {% for map in maps %}
+                <option value="{{ map }}">{{ map }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Switch map">
+    </form> -->
 
     <script>
         $(document).ready(function(){
@@ -185,8 +203,7 @@
                             [6909, 4727]
                         ];
                     
-                        L.imageOverlay("{{ url_for('static', filename='img/ready_map2.png') }}", bounds).addTo(map);
-                        map.fitBounds(bounds);
+                        L.imageOverlay("{{ url_for('static', filename='img/maps/' + cmap) }}", bounds).addTo(map);                        map.fitBounds(bounds);
                     
                         var currentCircle = null;
                     
@@ -272,7 +289,7 @@
     </form> -->
 
     <!-- service_area_start  -->
-    <div class="service_area">
+    <!-- <div class="service_area">
         <div class="container">
             <div class="row justify-content-center ">
                 <div class="col-lg-7 col-md-10">
@@ -324,11 +341,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- service_area_end -->
 
     <!-- pet_care_area_start  -->
-    <div class="pet_care_area">
+    <!-- <div class="pet_care_area">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-5 col-md-6">
@@ -349,11 +366,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- pet_care_area_end  -->
 
     <!-- adapt_area_start  -->
-    <div class="adapt_area">
+    <!-- <div class="adapt_area">
         <div class="container">
             <div class="row justify-content-between align-items-center">
                 <div class="col-lg-5">
@@ -399,11 +416,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- adapt_area_end  -->
 
     <!-- team_area_start  -->
-    <div class="team_area">
+    <!-- <div class="team_area">
         <div class="container">
             <div class="row justify-content-center ">
                 <div class="col-lg-6 col-md-10">
@@ -455,7 +472,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- team_area_start  -->
 
 {% endblock %}

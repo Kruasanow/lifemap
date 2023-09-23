@@ -154,6 +154,14 @@
                 <input type="password" id="admin_key" name="admin_key" style="display: none;">
             </label>
     
+            <label for="map">Выберите карту:
+                <select id="map" name="map">
+                    {% for map in maps %}
+                    <option value="{{ map[0] }}">{{ map[0] }}</option>
+                    {% endfor %}
+                </select>
+            </label>            
+
             <input type="submit" value="Проникнуть">
         </form>
     </div>

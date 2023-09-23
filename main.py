@@ -7,7 +7,7 @@ from flask_bcrypt import Bcrypt
 from init_db import get_db_connection
 from functools import wraps
 from sensetive_data import admin_key, app_secret_key
-from f import EventForm, allowed_file, replaced_string, check_admin
+from f import EventForm, allowed_file, replaced_string, check_admin, get_maps, replace_huetu
 
 app = Flask(__name__)
 app.secret_key = app_secret_key  # Random secret key for sessions
@@ -41,6 +41,21 @@ def switch_user():
     session['username'] = new_username
     return redirect(url_for('main'))
 
+@app.route('/switch_map_main', methods=['POST'])
+def switch_map_index():
+    map = request.form.get('map_main')
+    # В этом месте вы должны добавить код для проверки, разрешено ли текущему пользователю становиться другим пользователем
+    session['map_main'] = map
+    return redirect(url_for('main'))
+
+# @app.route('/switch_map', methods=['POST'])
+# def switch_map():
+#     map = request.form.get('map')
+#     # В этом месте вы должны добавить код для проверки, разрешено ли текущему пользователю становиться другим пользователем
+#     session['map'] = map
+#     return redirect(url_for('index'))
+
+
 @app.route('/delete_event/<int:event_id>')
 @admin_required
 @login_required
@@ -55,11 +70,33 @@ def delete_event(event_id):
     return redirect(url_for('cabinet'))
 
 
+# @app.before_request
+# def restore_original_username():
+#     # Проверяем, является ли конечная точка не 'main' и есть ли в сессии 'original_username'
+#     if request.endpoint != 'main' and 'original_username' in session:
+#         session['username'] = session['original_username']
+
+# @app.before_request
+# def set_original_username():
+#     if 'username' in session and 'original_username' not in session:
+#         session['original_username'] = session['username']
+
+# @app.after_request
+# def restore_original_username(response):
+#     if 'original_username' in session:
+#         session['username'] = session['original_username']
+#     return response
+
 @app.before_request
-def restore_original_username():
-    # Проверяем, является ли конечная точка не 'main' и есть ли в сессии 'original_username'
+def handle_username():
+    # Устанавливаем original_username, если он еще не установлен.
+    if 'username' in session and 'original_username' not in session:
+        session['original_username'] = session['username']
+    
+    # Если текущий запрос не к странице /main, восстанавливаем оригинальное имя пользователя.
     if request.endpoint != 'main' and 'original_username' in session:
         session['username'] = session['original_username']
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -103,13 +140,25 @@ def login():
         username = session['username']
     except Exception:
         username = 'Вы еще не вошли в аккаунт'
+    
+    conn = get_db_connection()
+    cur = conn.cursor()
+    
+    try:
+        maps = get_maps()
+    except Exception:
+        print('hueta s maps')
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
         admin_key = request.form.get('admin_key', '')
+        current_map = request.form['map']
 
-        conn = get_db_connection()
-        cur = conn.cursor()
+        cur.execute("SELECT filename FROM maps WHERE city_name = %s", (current_map,))
+        current_map_file = cur.fetchone()
+        session['current_map'] = current_map_file
+
         try:
             cur.execute("SELECT passwd FROM users WHERE username = %s", (username,))
             stored_password = cur.fetchone()
@@ -138,7 +187,7 @@ def login():
             flash('Ошибка входа! Проверьте никнейм и/или пароль.', 'danger')
             return redirect(url_for('login'))
 
-    return render_template('login.html', username = username, admin_mode = check_admin())
+    return render_template('login.html', username = username, admin_mode = check_admin(), maps = maps)
 
 
 @app.route('/addfriend', methods=['GET', 'POST'])
@@ -200,32 +249,49 @@ def addfriend():
 
         return redirect(url_for('addfriend'))
 
-    return render_template('addfriend.html', admin_mode = check_admin())
+    return render_template('addfriend.html', admin_mode = check_admin(), username = session['username'])
 
-
-
-
-@app.route('/main')
+@app.route('/main', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def main():
 
-    try:
-        username = session['username']
-    except Exception:
-        username = 'Вы еще не вошли в аккаунт'
-
     conn = get_db_connection()
     cur = conn.cursor()
+
+    if request.method == 'POST':
+        session['username'] = request.form['username']
+
+    original_username = session.get('original_username', 'Вы еще не вошли в аккаунт')
+
+    # Выбираем всех друзей
+    cur.execute("SELECT friend, private FROM user_friends WHERE username = %s;", (original_username,))
+    friends_data = cur.fetchall()
+    friends = [friend[0] for friend in friends_data]
+    close_friends = [friend[0] for friend in friends_data if friend[1]]
 
     cur.execute("SELECT username FROM users")
     users = [user[0] for user in cur.fetchall()]
 
-    cur.execute('SELECT * FROM events WHERE owner_name = %s;', (session['username'],))
-    data = cur.fetchall()
+    # Если выбранный пользователь - это близкий друг
+    if session['username'] in close_friends:
+        cur.execute('SELECT * FROM events WHERE owner_name = %s AND map = %s;', 
+                    (session['username'], session['current_map']))
+    # Если выбранный пользователь - это просто друг
+    elif session['username'] in friends:
+        cur.execute('SELECT * FROM events WHERE owner_name = %s AND map = %s AND is_private = 0;', 
+                    (session['username'], session['current_map']))
+    else:
+        cur.execute('SELECT * FROM events WHERE owner_name = %s AND map = %s;', (original_username, session['current_map']))
 
+    data = cur.fetchall()
+    cmap = replace_huetu(session['current_map'])
     extracted = [[t[1], t[2], t[3], replaced_string(t[5])] for t in data]
-    return render_template('main.html', ext = extracted, users = users, username = username, admin_banner = check_admin())
+
+    cur.close()
+    conn.close()
+
+    return render_template('main.html', ext=extracted, users=users, cmap=cmap, username=original_username, admin_banner=check_admin())
 
 
 @app.route('/cabinet')
@@ -239,6 +305,9 @@ def cabinet():
     # Количество друзей
     cur.execute("SELECT COUNT(*) FROM user_friends WHERE username = %s;", (username,))
     total_friends = cur.fetchone()[0]
+
+    cur.execute("SELECT friend, private FROM user_friends WHERE username = %s;", (username,))
+    friends_data = cur.fetchall()
 
     # Количество близких друзей
     cur.execute("SELECT COUNT(*) FROM user_friends WHERE username = %s AND private = TRUE;", (username,))
@@ -284,6 +353,7 @@ def cabinet():
     return render_template('cabinet.html',
                            admin_mode = check_admin(),
                            events = events,
+                           friends=friends_data,
                            username=username, 
                            total_friends=total_friends, 
                            close_friends=close_friends, 
@@ -316,6 +386,12 @@ def article(unique_identifier):
 @app.route('/')
 @login_required
 def index():
+
+    try:
+        maps = get_maps()
+    except Exception:
+        print('hueta s maps')
+    
     try:
         username = session['username']
     except Exception:
@@ -323,13 +399,16 @@ def index():
     conn = get_db_connection()
     cur = conn.cursor()
 
-    cur.execute('SELECT * FROM events WHERE owner_name = %s;', (session['username'],))
+    cur.execute('SELECT * FROM events WHERE owner_name = %s AND map = %s;', (session['username'], session['current_map']))
+
     data = cur.fetchall()
     # for t in data:
         # print(t)
     extracted = [[t[1], t[2], t[3], replaced_string(t[5])] for t in data]
+    cmap = replace_huetu(session['current_map'])
+    print(cmap)
     # print(extracted)
-    return render_template('index.html', ext = extracted, username = username, admin_mode = check_admin())
+    return render_template('index.html', ext = extracted, username = username, admin_mode = check_admin(), cmap = cmap)
 
 @app.route('/createdescription', methods=['GET', 'POST'])
 @login_required
@@ -338,6 +417,9 @@ def createdescription():
         username = session['username']
     except Exception:
         username = 'Вы еще не вошли в аккаунт'
+
+    cmap = replace_huetu(session['current_map'])
+
     form = EventForm()
     if form.validate_on_submit():
         title = form.title.data
@@ -389,10 +471,10 @@ def createdescription():
             
             conn = get_db_connection()
             cur = conn.cursor()
-
-            cur.execute('INSERT INTO events (coords, title, short_description, full_description, photo, gallery_photos, rating, owner_name, is_private) '
-                        'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)',
-                        (coords, title, short_description, full_description, photo_path, gallery_paths, rating, session['username'], is_private))
+            
+            cur.execute('INSERT INTO events (coords, title, short_description, full_description, photo, gallery_photos, rating, owner_name, is_private, map) '
+                        'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                        (coords, title, short_description, full_description, photo_path, gallery_paths, rating, session['username'], is_private, cmap))
 
 
             conn.commit()
@@ -406,7 +488,7 @@ def createdescription():
 
         return redirect(url_for('createdescription'))
 
-    return render_template('createdescription.html', form=form, username = username)
+    return render_template('createdescription.html', form=form, username = username, cmap = cmap)
 
 @app.route('/save_coordinates', methods=['POST'])
 def save_coordinates():

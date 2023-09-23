@@ -29,8 +29,35 @@ def replaced_string(stroka):
 
 def check_admin():
     from flask import session
-    if session['is_admin'] == True:
-        admin_banner = '[Суперпользователь]'
-    else:
-        admin_banner = '[Пользователь]'
+    try:
+        if session['is_admin'] == True:
+            admin_banner = '[Суперпользователь]'
+        else:
+            admin_banner = '[Пользователь]'
+    except Exception:
+        session['is_admin'] = '[Роль не выбрана]'
+        admin_banner = session['is_admin']
     return admin_banner
+
+
+def get_maps():
+    from init_db import get_db_connection
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute('SELECT city_name, filename FROM maps;')
+    maps = cur.fetchall()
+    
+    cur.close()
+    conn.close()
+    
+    #[
+    # ('Краснодар', '/static/img/maps/krasnodar.png'), 
+    # ('Санкт-Петербург', '/static/img/maps/spb.png'), 
+    # ('Белая-Глина', '/static/img/maps/belaya.png')
+    # ]
+    return maps
+
+def replace_huetu(stroka):
+    stroka = str(stroka).replace('(','').replace(')','').replace(',','').replace("'",'')
+    return stroka

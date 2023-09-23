@@ -27,11 +27,26 @@ try:
                         'rating INTEGER NOT NULL,'
                         'owner_name TEXT NOT NULL,'
                         'is_private INTEGER NOT NULL,'
+                        'map TEXT NOT NULL,'
                         'date_added date DEFAULT CURRENT_TIMESTAMP);'
                 )
 except Exception:
       print('hui tebe a ne events')
       pass
+
+try:
+        cur.execute('CREATE TABLE maps (id SERIAL PRIMARY KEY,'
+                        'city TEXT NOT NULL,'
+                        'city_name TEXT NOT NULL,'
+                        'filename TEXT NOT NULL,'
+                        'optional_one TEXT,'
+                        'optional_two TEXT,'
+                        'date_added date DEFAULT CURRENT_TIMESTAMP);'
+                )
+except Exception:
+      print('hui tebe a ne map')
+      pass
+
 # cur.execute('DROP TABLE IF EXISTS users;')
 try:
         cur.execute('CREATE TABLE users (id serial PRIMARY KEY,'
