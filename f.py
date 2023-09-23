@@ -9,7 +9,7 @@ class EventForm(FlaskForm):
     event_photo = FileField('Фото события')
     multiple_photos = MultipleFileField('Выберите до 20 фотографий', render_kw={"multiple": True})
     rating = IntegerField('Рейтинг', validators=[DataRequired(), validators.NumberRange(min=1, max=10)])
-    is_private = BooleanField('Название вашего чекбокса')  
+    is_private = BooleanField('Сделать событие приватным')  
 
 def allowed_file(filename):
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}

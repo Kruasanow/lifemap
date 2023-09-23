@@ -141,6 +141,24 @@
         }
     </style>
 
+    <style>
+        .custom-checkbox {
+            background-color: #900;
+            display: block;
+            padding: 10px;
+        }
+
+        .checkbox-label {
+            color: #fff;  /* Устанавливаем цвет текста в белый */
+        }
+
+        .checkbox-style {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+    </style>
+
     <script>
         document.getElementById('eventPhotoInput').addEventListener('change', function() {
             const chosenFile = this.files[0];
@@ -188,8 +206,11 @@
             <label for="{{ form.rating.id }}">{{ form.rating.label }}</label>
             {{ form.rating(class="input-style") }}<br>
 
-            <label for="{{ form.is_private.id }}">{{ form.is_private.label }}</label>
-            {{ form.is_private() }}<br>
+            <div class="custom-checkbox">
+                {{ form.is_private() }}
+                <label for="{{ form.is_private.id }}" class="checkbox-label">{{ form.is_private.label }}</label>
+            </div>
+
             <br>
             Выбери координату на карте, а только потом : 
             <input type="submit" value="Создать событие">

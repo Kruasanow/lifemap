@@ -420,7 +420,32 @@ def createdescription():
         rating = form.rating.data
         is_private = 1 if form.is_private.data else 0
 
-        # Создаем основную директорию для события
+        # Проверка длины полей
+        if len(title) > 40:
+            flash('Название должно содержать не более 40 символов.')
+            return render_template('createdescription.html', form=form, username=username, cmap=cmap)
+
+        if len(short_description) > 100:
+            flash('Краткое описание должно содержать не более 100 символов.')
+            return render_template('createdescription.html', form=form, username=username, cmap=cmap)
+
+        if len(full_description) > 1000:
+            flash('Полное описание должно содержать не более 1000 символов.')
+            return render_template('createdescription.html', form=form, username=username, cmap=cmap)
+
+        # Проверка размера файла
+        f = form.event_photo.data
+        if f and f.filename:
+            # Проверяем размер изображения
+            f.seek(0, os.SEEK_END)
+            file_size = f.tell()
+            f.seek(0)
+            if file_size > 20 * 1024 * 1024:  # 30 МБ
+                flash('Размер изображения должен быть не более 20 МБ.')
+                return render_template('createdescription.html', form=form, username=username, cmap=cmap)
+
+        # Оставшаяся часть сохранения данных
+
         user_folder = os.path.join(app.config['UPLOAD_FOLDER'], session['username'])
         event_folder = os.path.join(user_folder, title)
 
@@ -428,12 +453,10 @@ def createdescription():
             os.makedirs(event_folder)
 
         # Сохраняем основное фото, если оно есть
-        f = form.event_photo.data
-        if f and f.filename and allowed_file(f.filename):
+        if f and allowed_file(f.filename):
             filename = secure_filename(f.filename)
             f.save(os.path.join(event_folder, filename))
-            photo_path = os.path.join(title, filename)  # Путь к сохраненному фото
-
+            photo_path = os.path.join(title, filename) 
         else:
             photo_path = None
 
@@ -449,18 +472,13 @@ def createdescription():
                 if upload and upload.filename and allowed_file(upload.filename):
                     filename = secure_filename(upload.filename)
                     upload.save(os.path.join(gallery_folder, filename))
-                    gallery_paths.append(os.path.join(title, "галерея фото", filename))  # Пути к сохраненным фото
-
-        else:
-            gallery_paths = []
+                    gallery_paths.append(os.path.join(title, "галерея фото", filename))
 
         try:
             coords = session['X'] + ':' + session['Y']
-            
-            # Удалите координаты из сессии сразу после их использования
             session.pop('X', None)
             session.pop('Y', None)
-            
+
             conn = get_db_connection()
             cur = conn.cursor()
             
@@ -468,19 +486,17 @@ def createdescription():
                         'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
                         (coords, title, short_description, full_description, photo_path, gallery_paths, rating, session['username'], is_private, cmap))
 
-
             conn.commit()
             cur.close()
             conn.close()
         except Exception:
             flash('Выберите координаты')
-            print("kakaya-to hueta" + str(is_private))
-        # Вставляем данные в базу данных
-
+            print("Ошибка: " + str(is_private))
 
         return redirect(url_for('createdescription'))
 
-    return render_template('createdescription.html', form=form, username = username, cmap = cmap)
+    return render_template('createdescription.html', form=form, username=username, cmap=cmap)
+
 
 @app.route('/save_coordinates', methods=['POST'])
 def save_coordinates():
