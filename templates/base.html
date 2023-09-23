@@ -129,7 +129,58 @@
                     right: 0;
                 }
             </style>
-            
+            <style>
+            .dropdown {
+                display: none;
+            }
+
+            /* Отображаем только на мобильных устройствах */
+            @media screen and (max-width: 767px) {
+                /* Стили для основного блока выпадающего меню */
+                .dropdown {
+                    display: inline-block;
+                    position: relative;
+                }
+
+                /* Стили для блока с текстом "Навигация" */
+                .dropdown-toggle {
+                    padding: 10px 20px;
+                    cursor: pointer;
+                    border: 1px solid #ccc;
+                    background-color: #f9f9f9;
+                }
+
+                /* Стили для скрытого меню */
+                .dropdown-menu {
+                    z-index: 9999;
+                    display: none;
+                    position: absolute;
+                    left: 0;
+                    top: 100%;
+                    /* z-index: 1; */
+                    border: 1px solid #ccc;
+                    background-color: #f9f9f9;
+                }
+
+                .dropdown-menu a {
+                    padding: 10px 20px;
+                    display: block;
+                    color: #333;
+                    text-decoration: none;
+                }
+
+                .dropdown-menu a:hover {
+                    background-color: #ddd;
+                }
+
+                /* Отображение меню при наведении на "Навигация" */
+                .dropdown:hover .dropdown-menu {
+                    display: block;
+                }
+            }
+
+            </style>
+
             <div id="sticky-header" class="main-header-area">
                 <div class="container">
                     <div class="row align-items-center">
@@ -173,6 +224,16 @@
                 </div>
             </div>
         </div>
+        <div class="dropdown">
+            <div class="dropdown-toggle">Навигация</div>
+            <div class="dropdown-menu">
+                <a href="/login">Вход</a>
+                <a href="/register">Регистрация</a>
+                <a href="/addfriend">Добавить друга</a>
+                <a href="/main">На главную</a>
+                <a href="/cabinet">Личный кабинет</a>
+            </div>
+        </div>
     </header>
 
 
@@ -211,6 +272,21 @@
         <div class="footer_top">
             <div class="container">
                 <div class="row">
+                    <div class="col-xl-3  col-md-6 col-lg-3">
+                        <div class="footer_widget">
+                            <h3 class="footer_title">
+                                Навигация
+                            </h3>
+                            <ul class="links">
+                                <li><a href="/login">Вход</a></li>
+                                <li><a href="/register">Регистрация</a></li>
+                                <li><a href="/addfriend">Добавить друга</a></li>
+                                <li><a href="/main">На главную</a></li>
+                                <li><a href="/cabinet">Личный кабинет</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <hr>
                     <div class="col-xl-3 col-md-6 col-lg-3">
                         <div class="footer_widget">
                             <h3 class="footer_title">
@@ -231,17 +307,6 @@
                             <ul class="links">
                                 <li><a href="https://t.me/olegKustarnikov">Telegram</a></li>
                                 <li><a href="https://github.com/Kruasanow">GitHub </a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-xl-3  col-md-6 col-lg-3">
-                        <div class="footer_widget">
-                            <h3 class="footer_title">
-                                Навигация
-                            </h3>
-                            <ul class="links">
-                                <li><a href="/login">Вход</a></li>
-                                <li><a href="/register">Регистрация</a></li>
                             </ul>
                         </div>
                     </div>

@@ -10,6 +10,10 @@
         <div class="single_slider slider_bg_1 d-flex align-items-center">
             <div class="container">
                 <div class="row">
+                    <!-- Image for mobile view -->
+                    <div class="col-12 d-lg-none mt-3">
+                        <img src="{{ url_for('static', filename='img/banner/zalupa3.png')}}" alt="" style="width: 100%;">
+                    </div>
                     <div class="col-lg-5 col-md-6">
                         <div class="slider_text">
                             <h3>Мы сохраним <br> <span>Твои воспоминания</span></h3>
@@ -19,38 +23,12 @@
                     </div>
                 </div>
             </div>
+            <!-- Image for desktop view -->
             <div class="dog_thumb d-none d-lg-block">
                 <img src="{{ url_for('static', filename='img/banner/zalupa3.png')}}" alt="">
             </div>
         </div>
     </div>
-
-    <!-- <form action="/switch_user" method="post">
-        <select name="username">
-            {% for user in users %}
-                <option value="{{ user }}">{{ user }}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Switch User">
-    </form> -->
-
-    <form action="/switch_user" method="post">
-        <select name="username">
-            {% for friend in users %}
-                <option value="{{ friend }}">{{ friend }}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Switch User">
-    </form>
-
-    <!-- <form action="/switch_map_main" method="post">
-        <select name="map_main">
-            {% for map in maps %}
-                <option value="{{ map }}">{{ map }}</option>
-            {% endfor %}
-        </select>
-        <input type="submit" value="Switch map">
-    </form> -->
 
     <script>
         $(document).ready(function(){
@@ -64,6 +42,34 @@
         });
         </script>
 <!-- testmonial_area_start -->
+
+<style>
+    .boxed-btn4 {
+    background-color: red;
+    border: none;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.boxed-btn4:hover {
+    background-color: darkred;
+}
+</style>
+
+<h2>Переключить пользователя</h2>
+<form action="/switch_user" method="post" class="mt-4">
+    <div class="form-group">
+        <select name="username" class="form-control">
+            {% for friend in users %}
+                <option value="{{ friend }}">{{ friend }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Switch User" class="boxed-btn4">
+    </div>
+</form>
+
 <div class="testmonial_area">
     <div class="container">
         <div class="row justify-content-center">
@@ -254,12 +260,21 @@
                                 <a href="/article/${uniqueIdentifier}">Подробнее</a>
                             `;
 
-                            let markerIcon = L.divIcon({
-                                className: 'marker-icon',
-                                html: `<img src="${userFolderPath}/${item[1]}/${item[2]}" alt="Marker Image">`
-                            });
+                            // let markerIcon = L.divIcon({
+                            //     className: 'marker-icon',
+                            //     html: `<img src="${userFolderPath}/${item[1]}/${item[2]}" alt="Marker Image">`
+                            // });
+                        
+                            // L.marker([y, x], {icon: markerIcon}).bindPopup(popupHtml).addTo(map);
+                            L.circleMarker([y, x], {
+                                radius: 8,
+                                fillColor: "red",
+                                color: "black",
+                                weight: 2,
+                                opacity: 2,
+                                fillOpacity: 0.8
+                            }).bindPopup(popupHtml).addTo(map);
 
-                            L.marker([y, x], {icon: markerIcon}).bindPopup(popupHtml).addTo(map);
                         });
                     </script>
 

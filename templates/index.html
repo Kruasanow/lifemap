@@ -6,25 +6,32 @@
 {% block content %}
 <!-- {{username}} {{admin_mode}} - <a href="/cabinet">Личный кабинет</a> -->
 <h2>Страница ваших событий</h2>
-    <!-- slider_area_start -->
-    <div class="slider_area">
-        <div class="single_slider slider_bg_1 d-flex align-items-center">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-5 col-md-6">
-                        <div class="slider_text">
-                            <h3>Мы сохраним <br> <span>Твои воспоминания</span></h3>
-                            <p>Самые яркие эмоции. <br> Самое лучшее настроение.</p><br>
-                            <a href="/createdescription" class="boxed-btn4">Создать событие</a>
-                        </div>
+<!-- slider_area_start -->
+<div class="slider_area">
+    <div class="single_slider slider_bg_1 d-flex align-items-center">
+        <div class="container">
+            <div class="row">
+                <!-- Image for mobile view -->
+                <div class="col-12 d-lg-none mt-3">
+                    <img src="{{ url_for('static', filename='img/banner/zalupa3.png')}}" alt="" style="width: 100%;">
+                </div>
+                <div class="col-lg-5 col-md-6">
+                    <div class="slider_text">
+                        <h3>Мы сохраним <br> <span>Твои воспоминания</span></h3>
+                        <p>Самые яркие эмоции. <br> Самое лучшее настроение.</p><br>
+                        <a href="/createdescription" class="boxed-btn4">Создать событие</a>
                     </div>
                 </div>
             </div>
-            <div class="dog_thumb d-none d-lg-block">
-                <img src="{{ url_for('static', filename='img/banner/zalupa3.png')}}" alt="">
-            </div>
+        </div>
+        <!-- Image for desktop view -->
+        <div class="dog_thumb d-none d-lg-block">
+            <img src="{{ url_for('static', filename='img/banner/zalupa3.png')}}" alt="">
         </div>
     </div>
+</div>
+
+
     <!-- slider_area_end -->
 
     <script>
@@ -249,12 +256,21 @@
                                 <a href="/article/${uniqueIdentifier}">Подробнее</a>
                             `;
 
-                            let markerIcon = L.divIcon({
-                                className: 'marker-icon',
-                                html: `<img src="${userFolderPath}/${item[1]}/${item[2]}" alt="Marker Image">`
-                            });
+                            // let markerIcon = L.divIcon({
+                            //     className: 'marker-icon',
+                            //     html: `<img src="${userFolderPath}/${item[1]}/${item[2]}" alt="Marker Image">`
+                            // });
+                        
+                            // L.marker([y, x], {icon: markerIcon}).bindPopup(popupHtml).addTo(map);
+                            L.circleMarker([y, x], {
+                                radius: 8,
+                                fillColor: "red",
+                                color: "black",
+                                weight: 2,
+                                opacity: 2,
+                                fillOpacity: 0.8
+                            }).bindPopup(popupHtml).addTo(map);
 
-                            L.marker([y, x], {icon: markerIcon}).bindPopup(popupHtml).addTo(map);
                         });
                     </script>
 
