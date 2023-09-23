@@ -20,7 +20,7 @@ def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if 'loggedin' not in session:
-            flash('Please log in to access this page.', 'warning')
+            flash('Доступ к странице после входа.', 'warning')
             return redirect(url_for('login'))
         return f(*args, **kwargs)
     return decorated_function
@@ -29,7 +29,7 @@ def admin_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not session.get('is_admin', False):
-            flash('You need to be an admin to access this page.', 'danger')
+            flash('Ты должен быть в режиме суперпользователя чтобы добавлять друзей.', 'danger')
             return redirect(url_for('index'))
         return f(*args, **kwargs)
     return decorated_function
@@ -47,13 +47,6 @@ def switch_map_index():
     # В этом месте вы должны добавить код для проверки, разрешено ли текущему пользователю становиться другим пользователем
     session['map_main'] = map
     return redirect(url_for('main'))
-
-# @app.route('/switch_map', methods=['POST'])
-# def switch_map():
-#     map = request.form.get('map')
-#     # В этом месте вы должны добавить код для проверки, разрешено ли текущему пользователю становиться другим пользователем
-#     session['map'] = map
-#     return redirect(url_for('index'))
 
 
 @app.route('/delete_event/<int:event_id>')
@@ -139,7 +132,7 @@ def login():
     try:
         username = session['username']
     except Exception:
-        username = 'Вы еще не вошли в аккаунт'
+        username = ''
     
     conn = get_db_connection()
     cur = conn.cursor()
@@ -217,7 +210,7 @@ def addfriend():
                 if email == check_email:
                     if secret == admin_key:
                         private_value = True
-                        message = 'Added friend with full access!'
+                        message = 'Пользователь добавлен в близкие друзья'
 
                         # Если друг уже существует и private был False, обновляем его значение
                         if friend_existence and not friend_existence[0]:
@@ -228,7 +221,7 @@ def addfriend():
 
                     else:
                         private_value = False
-                        message = 'Added friend with restricted access!'
+                        message = 'Пользователь добавлен в друзья'
 
                         # Если друг не существует, добавляем его в список
                         if not friend_existence:
@@ -262,7 +255,7 @@ def main():
     if request.method == 'POST':
         session['username'] = request.form['username']
 
-    original_username = session.get('original_username', 'Вы еще не вошли в аккаунт')
+    original_username = session.get('original_username', '')
 
     # Выбираем всех друзей
     cur.execute("SELECT friend, private FROM user_friends WHERE username = %s;", (original_username,))
@@ -371,7 +364,7 @@ def article(unique_identifier):
     try:
         username = session['username']
     except Exception:
-        username = 'Вы еще не вошли в аккаунт'
+        username = ''
     # Разбить unique_identifier на две части: имя пользователя и название события
     username, event_title = unique_identifier.split("_", 1)
     print(unique_identifier)
@@ -395,19 +388,18 @@ def index():
     try:
         username = session['username']
     except Exception:
-        username = 'Вы еще не вошли в аккаунт'
+        username = ''
     conn = get_db_connection()
     cur = conn.cursor()
+    try:
+        cur.execute('SELECT * FROM events WHERE owner_name = %s AND map = %s;', (session['username'], session['current_map']))
+        data = cur.fetchall()
+        extracted = [[t[1], t[2], t[3], replaced_string(t[5])] for t in data]
+        cmap = replace_huetu(session['current_map'])
+        print(cmap)
+    except Exception:
+        return redirect('/login')
 
-    cur.execute('SELECT * FROM events WHERE owner_name = %s AND map = %s;', (session['username'], session['current_map']))
-
-    data = cur.fetchall()
-    # for t in data:
-        # print(t)
-    extracted = [[t[1], t[2], t[3], replaced_string(t[5])] for t in data]
-    cmap = replace_huetu(session['current_map'])
-    print(cmap)
-    # print(extracted)
     return render_template('index.html', ext = extracted, username = username, admin_mode = check_admin(), cmap = cmap)
 
 @app.route('/createdescription', methods=['GET', 'POST'])
@@ -416,7 +408,7 @@ def createdescription():
     try:
         username = session['username']
     except Exception:
-        username = 'Вы еще не вошли в аккаунт'
+        username = ''
 
     cmap = replace_huetu(session['current_map'])
 

@@ -97,7 +97,7 @@
                     <div class="row align-items-center">
                         <div class="col-xl-3 col-lg-3">
                             <div class="logo">
-                                <a href="index.html">
+                                <a href="#">
                                     <img src="{{ url_for('static', filename='img/logotype.png')}}" class="roundedPNG" alt="">
                                 </a>
                             </div>
@@ -108,6 +108,8 @@
                                     <ul id="navigation">
                                         <li><a  href="/login">Вход</a></li>
                                         <li><a href="/register">Регистрация</a></li>
+                                        <li><a href="/addfriend">Добавить друга</a></li>
+                                        <li><a href="/main">На главную</a></li>
                                         <li><a href="/login">Медиа <i class="ti-angle-down"></i></a>
                                             <ul class="submenu">
                                                 <li><a href="https://media.tenor.com/UXLMBxxNUsQAAAAd/papich.gif">Личная жизнь</a></li>
@@ -115,6 +117,7 @@
                                                 <li><a href="https://otkritkis.com/wp-content/uploads/2022/06/mwrj4.gif">Досуг</a></li>
                                             </ul>
                                         </li>
+                                        <li><a href="/cabinet">{{username}} {{admin_mode}}</a></li>
                                     </ul>
                                 </nav>
                             </div>
