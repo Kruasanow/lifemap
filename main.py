@@ -295,9 +295,15 @@ def cabinet():
     # Информация о пользователе
     cur.execute("SELECT fname, sname, email, date_added FROM users WHERE username = %s;", (username,))
     user_data = cur.fetchone()
-    full_name = f"{user_data[0]} {user_data[1]}"
-    email = user_data[2]
-    date_registered = user_data[3]
+    if user_data:
+        full_name = f"{user_data[0]} {user_data[1]}"
+        email = user_data[2]
+        date_registered = user_data[3]
+    else:
+        # Обработайте отсутствующего пользователя как вам необходимо, например:
+        full_name = "Неизвестный пользователь"
+        email = "Не указан"
+        date_registered = "Дата регистрации неизвестна"
 
     # Количество событий пользователя
     cur.execute("SELECT COUNT(*) FROM events WHERE owner_name = %s;", (username,))
