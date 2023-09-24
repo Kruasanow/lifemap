@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{% endblock %}
+{% block title %}Просмотр друзей{% endblock %}
 
 {% block content %}
 {{username}} {{admin_banner}}
@@ -73,6 +73,7 @@
     </div>
 </form>
 
+{% if ext|length > 0 %}
 <div class="testmonial_area">
     <div class="container">
         <div class="row justify-content-center">
@@ -84,7 +85,6 @@
                             <div class="test_thumb">
                                 {% if item[3] and item[3][0] and item[3][1] %}
                                 <img src="{{ url_for('static', filename='uploads/' + selected_username + '/' + item[3][0] + '/' + item[3][1]) }}" alt="">
-
                                 {% endif %}
                             </div>
                             <div class="test_content">
@@ -100,6 +100,8 @@
         </div>
     </div>
 </div>
+{% endif %}
+
 <!-- testmonial_area_end -->
 
     <!------------------------------------------------------------------------------------------------------------------------->
@@ -181,9 +183,10 @@
     </style>
 
                     <!-- Здесь блок карты -->
-                    <div class="map-wrapper" style="display: flex; justify-content: center; width: 100%;">
+                    <div class="map-wrapper" style="display: flex; justify-content: center; width: 100%; background-color: #e8e8e8; background-image: url('/static/img/zup.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
                         <div id="map" style="height: 1600px; margin-top: 20px; margin-bottom: 20px;"></div>
                     </div>
+
                     
                     <script>
                         var userFolderPath = "{{ url_for('static', filename='uploads/' + username) }}";
@@ -305,3 +308,5 @@
     </style>
 
 {% endblock %}
+{% block footermain %} 123123 {% endblock %}
+{% block footersec %} 123123 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{% endblock %}
+{% block title %}Создание события{% endblock %}
 
 {% block content %}
 {{username}}
@@ -289,7 +289,7 @@
     </style>
 
                     <!-- Здесь блок карты -->
-                    <div class="map-wrapper" style="display: flex; justify-content: center; width: 100%;">
+                    <div class="map-wrapper" style="display: flex; justify-content: center; width: 100%; background-color: #e8e8e8; background-image: url('/static/img/zup.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
                         <div id="map" style="height: 1600px; margin-top: 20px; margin-bottom: 20px;"></div>
                     </div>
                     
@@ -378,3 +378,5 @@
         <input type="submit" id="square" class="square-button" value="Click me!">
     </form> -->
 {% endblock %}
+{% block footermain %} 123123 {% endblock %}
+{% block footersec %} 123123 {% endblock %}

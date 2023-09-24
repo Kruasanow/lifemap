@@ -205,29 +205,36 @@
         }
 </style>
 
-<h3>◀☸▶ Ваши события:</h3>
-<div class="owl-carousel">
-    {% for event in events %}
-        <div class="item">
-            <h4>{{ event[1] }}</h4>
-            <p>{{ event[3] }}</p>
-            <a href="{{ url_for('delete_event', event_id=event[0]) }}" class="delete-link">Удалить</a>
-            <!-- <h1>{{event[0]}}</h1> -->
-        </div>
-    {% endfor %}
-</div>
+{% if events|length > 0 %}
+    <h3>◀☸▶ Ваши события:</h3>
+    <div class="owl-carousel">
+        {% for event in events %}
+            <div class="item">
+                <h4>{{ event[1] }}</h4>
+                <p>{{ event[3] }}</p>
+                <a href="{{ url_for('delete_event', event_id=event[0]) }}" class="delete-link">Удалить</a>
+                <!-- <h1>{{event[0]}}</h1> -->
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
 
 <br><br>
 
-<h3>◀☸▶ Ваши друзья:</h3>
-<div class="owl-carousel">
-    {% for friend in friends %}
-        <div class="item">
-            <p style="font-weight: normal;">Имя друга: <strong>{{ friend[0] }}</strong></p>
-            <p style="font-weight: normal;">Близкий друг: <strong>{% if friend[1] %} Да {% else %} Нет {% endif %}</strong></p>        
-        </div>
-    {% endfor %}
-</div>
+{% if friends|length > 0 %}
+    <h3>◀☸▶ Ваши друзья:</h3>
+    <div class="owl-carousel">
+        {% for friend in friends %}
+            <div class="item">
+                <p style="font-weight: normal;">Имя друга: <strong>{{ friend[0] }}</strong></p>
+                <p style="font-weight: normal;">Близкий друг: <strong>{% if friend[1] %} Да {% else %} Нет {% endif %}</strong></p>        
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
 
 
 {% endblock %}
+{% block footermain %} 123123 {% endblock %}
+{% block footersec %} 123123 {% endblock %}
