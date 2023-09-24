@@ -63,24 +63,6 @@ def delete_event(event_id):
     flash('Событие успешно удалено!', 'success')
     return redirect(url_for('cabinet'))
 
-
-# @app.before_request
-# def restore_original_username():
-#     # Проверяем, является ли конечная точка не 'main' и есть ли в сессии 'original_username'
-#     if request.endpoint != 'main' and 'original_username' in session:
-#         session['username'] = session['original_username']
-
-# @app.before_request
-# def set_original_username():
-#     if 'username' in session and 'original_username' not in session:
-#         session['original_username'] = session['username']
-
-# @app.after_request
-# def restore_original_username(response):
-#     if 'original_username' in session:
-#         session['username'] = session['original_username']
-#     return response
-
 @app.before_request
 def handle_username():
     # Устанавливаем original_username, если он еще не установлен.
@@ -250,11 +232,14 @@ def addfriend():
 @admin_required
 def main():
 
+    if request.method == 'POST':
+        selected_user = request.form['username']
+        session['selected_user'] = selected_user
+    else:
+        selected_user = request.args.get('selected_user', session.get('selected_user', session['username']))
+
     conn = get_db_connection()
     cur = conn.cursor()
-
-    if request.method == 'POST':
-        session['username'] = request.form['username']
 
     original_username = session.get('original_username', '')
 
@@ -268,13 +253,13 @@ def main():
     users = [user[0] for user in cur.fetchall()]
 
     # Если выбранный пользователь - это близкий друг
-    if session['username'] in close_friends:
+    if selected_user in close_friends:
         cur.execute('SELECT * FROM events WHERE owner_name = %s AND map = %s;', 
-                    (session['username'], session['current_map']))
+                    (selected_user, session['current_map']))
     # Если выбранный пользователь - это просто друг
-    elif session['username'] in friends:
+    elif selected_user in friends:
         cur.execute('SELECT * FROM events WHERE owner_name = %s AND map = %s AND is_private = 0;', 
-                    (session['username'], session['current_map']))
+                    (selected_user, session['current_map']))
     else:
         cur.execute('SELECT * FROM events WHERE owner_name = %s AND map = %s;', (original_username, session['current_map']))
 
@@ -285,7 +270,7 @@ def main():
     cur.close()
     conn.close()
 
-    return render_template('main.html', ext=extracted, users=users, cmap=cmap, username=original_username, admin_banner=check_admin())
+    return render_template('main.html', ext=extracted, users=users, cmap=cmap, username=original_username, admin_banner=check_admin(), selected_username=selected_user)
 
 
 @app.route('/cabinet')
@@ -362,20 +347,18 @@ def cabinet():
 
 @app.route('/article/<path:unique_identifier>')
 def article(unique_identifier):
-    try:
-        username = session['username']
-    except Exception:
-        username = ''
-    # Разбить unique_identifier на две части: имя пользователя и название события
+
     username, event_title = unique_identifier.split("_", 1)
-    print(unique_identifier)
+    selected_user = session.get('selected_user', session['username'])
 
     cur = get_db_connection().cursor()
     cur.execute('SELECT * FROM events WHERE owner_name = %s AND title = %s;', (username, event_title))
     event = cur.fetchone()
+
     if not event:
         return "Статья не найдена", 404
-    return render_template('article.html', event=event, username = username, admin_mode = check_admin())
+
+    return render_template('article.html', event=event, username=username, admin_mode=check_admin(), selected_username=selected_user)
 
 @app.route('/')
 @login_required
