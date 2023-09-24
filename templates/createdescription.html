@@ -13,8 +13,63 @@
             </div>
         {% endif %}
     {% endwith %}
+    <style>
+        /* Стиль для экранов с шириной менее 768px (обычно это мобильные устройства) */
+        @media (max-width: 767px) {
+            #square1 {
+                width: 90%;
+                /* height: 700px; */
+                display: block;
+                margin: 0 auto; /* Центрирует кнопку горизонтально */
+            }
+        }
 
+        /* Стиль для экранов с шириной 768px и более (обычно это планшеты, ноутбуки и десктопы) */
+        @media (min-width: 768px) {
+            #square1 {
+                width: 60%;
+                display: block;
+                margin: 0 auto; /* Центрирует кнопку горизонтально */
+            }
+        }
+    </style>
+
+    <style>
+        /* Добавьте этот CSS на вашу страницу, например, в элемент <style> в шапке документа */
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%; /* или задайте конкретную высоту, если хотите ограничить карту по высоте */
+            margin: 0; /* Убираем отступы */
+        }
+        
+    </style>
     
+
+    <style>
+    @media (max-width: 767px) {
+        .login-container {
+            height: auto;
+            padding: 20px 0;
+        }
+
+        form, #map {
+            width: 90%;
+        }
+    }
+
+    @media (min-width: 768px) {
+        form, #map {
+            width: 60%;
+        }
+    }
+    </style>
     <style>
         @keyframes floatAnimation {
             0% {
@@ -56,18 +111,20 @@
             font-family: Arial, sans-serif;
             background-color: #fff;
             color: #900; /* красный цвет текста */
+            margin: 0;
+            padding: 0;
         }
 
         .login-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 90vh; /* высота экрана */
-            background-color: #fdf4f4; /* светло-серый фон */
+            padding: 40px 0; /* добавлено для отступов сверху и снизу */
+            background-color: #fdf4f4; 
             background-image: url("static/img/emely.jpg");
             background-repeat: no-repeat;
-            background-size: 200%; /* увеличиваем фон */
-            animation: floatAnimation 30s infinite; /* Примените анимацию */
+            background-size: cover; /* гарантирует, что изображение будет покрывать элемент */
+            background-position: center; /* центрирует изображение по вертикали и горизонтали */
         }
 
         form {
@@ -76,7 +133,7 @@
             border: 2px solid #900; /* красная рамка */
             border-radius: 8px; /* закругленные углы */
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* тень */
-            width: 50vw;
+            /* width: 50vw; */
         }
 
         input[type="submit"] {
@@ -171,23 +228,9 @@
         }
     </style>
 
-    <script>
-        document.getElementById('eventPhotoInput').addEventListener('change', function() {
-            const chosenFile = this.files[0];
-            if (chosenFile) {
-                document.getElementById('eventPhotoChosenFile').textContent = chosenFile.name;
-            }
-        });
 
-        document.getElementById('multiplePhotosInput').addEventListener('change', function() {
-            const chosenFiles = this.files;
-            if (chosenFiles.length) {
-                document.getElementById('multiplePhotosChosenFile').textContent = `${chosenFiles.length} файл(ов) выбрано`;
-            }
-        });
-    </script>
 
-        <h1>Форма события</h1>
+    <h1 style="padding-top: 20px;">Форма события</h1>
     <div class="login-container">
 
         <form method="POST" enctype="multipart/form-data">
@@ -228,72 +271,28 @@
             <input type="submit" value="Создать событие">
         </form>
     </div>
-
-
-    <style>
-        /* Стиль для экранов с шириной менее 768px (обычно это мобильные устройства) */
-        @media (max-width: 767px) {
-            #square1 {
-                width: 90%;
-                /* height: 700px; */
-                display: block;
-                margin: 0 auto; /* Центрирует кнопку горизонтально */
-            }
-        }
-
-        /* Стиль для экранов с шириной 768px и более (обычно это планшеты, ноутбуки и десктопы) */
-        @media (min-width: 768px) {
-            #square1 {
-                width: 60%;
-                display: block;
-                margin: 0 auto; /* Центрирует кнопку горизонтально */
-            }
-        }
-    </style>
-
-    <!-- <form action="/button_pressed" method="post">
-        <input type="submit" id="square1" class="square-button1" value="Click me!">
-    </form> -->
-
-    <style>
-        /* Добавьте этот CSS на вашу страницу, например, в элемент <style> в шапке документа */
-        html, body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
-        #map {
-            width: 100%;
-            height: 100%; /* или задайте конкретную высоту, если хотите ограничить карту по высоте */
-            margin: 0; /* Убираем отступы */
-        }
-    </style>
-    
-    <style>
-                /* Стиль для экранов с шириной менее 768px (обычно это мобильные устройства) */
-        @media (max-width: 767px) {
-            #map {
-                width: 90%;
-                height: 700px; 
-            }
-        }
-
-        /* Стиль для экранов с шириной 768px и более (обычно это планшеты, ноутбуки и десктопы) */
-        @media (min-width: 768px) {
-            #map {
-                width: 60%;
-            }
-        }
-    </style>
+    <div style="padding-bottom: 20px;"></div>
 
                     <!-- Здесь блок карты -->
                     <div class="map-wrapper" style="display: flex; justify-content: center; width: 100%; background-color: #e8e8e8; background-image: url('/static/img/zup.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
                         <div id="map" style="height: 1600px; margin-top: 20px; margin-bottom: 20px;"></div>
                     </div>
                     
-                    
+                    <script>
+                        document.getElementById('eventPhotoInput').addEventListener('change', function() {
+                            const chosenFile = this.files[0];
+                            if (chosenFile) {
+                                document.getElementById('eventPhotoChosenFile').textContent = chosenFile.name;
+                            }
+                        });
+                
+                        document.getElementById('multiplePhotosInput').addEventListener('change', function() {
+                            const chosenFiles = this.files;
+                            if (chosenFiles.length) {
+                                document.getElementById('multiplePhotosChosenFile').textContent = `${chosenFiles.length} файл(ов) выбрано`;
+                            }
+                        });
+                    </script>
                     <script>
                         function enableMapInteraction() {
                             map.tap.enable();
@@ -353,30 +352,7 @@
                         map.invalidateSize();  // Добавлено для коррекции размера карты
                     </script>
 
-    <style>
-        /* Стиль для экранов с шириной менее 768px (обычно это мобильные устройства) */
-        @media (max-width: 767px) {
-            #square {
-                width: 90%;
-                /* height: 700px; */
-                display: block;
-                margin: 0 auto; /* Центрирует кнопку горизонтально */
-            }
-        }
 
-        /* Стиль для экранов с шириной 768px и более (обычно это планшеты, ноутбуки и десктопы) */
-        @media (min-width: 768px) {
-            #square {
-                width: 60%;
-                display: block;
-                margin: 0 auto; /* Центрирует кнопку горизонтально */
-            }
-        }
-    </style>
-
-    <!-- <form action="/button_pressed" method="post">
-        <input type="submit" id="square" class="square-button" value="Click me!">
-    </form> -->
 {% endblock %}
 {% block footermain %} 123123 {% endblock %}
 {% block footersec %} 123123 {% endblock %}

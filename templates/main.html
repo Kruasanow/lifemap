@@ -57,6 +57,21 @@
 .boxed-btn4:hover {
     background-color: darkred;
 }
+@media (max-width: 767px) {
+    .slider_area {
+        margin-bottom: 40px;  /* Увеличиваем отступ снизу для слайдера для большего пространства между элементами */
+    }
+
+    .boxed-btn4 {
+        display: block; 
+        margin: 0 auto; 
+        margin-bottom: 25px; /* Увеличиваем отступ снизу у кнопки для большего пространства между элементами */
+        width: 100%; 
+        box-sizing: border-box;
+        text-align: center;
+    }
+}
+
 </style>
 
 <h2>Переключить пользователя</h2>
@@ -181,6 +196,26 @@
             max-height: 100%;
         }
     </style>
+        <style>
+            /* Стиль для экранов с шириной менее 768px (обычно это мобильные устройства) */
+            @media (max-width: 767px) {
+                #square {
+                    width: 90%;
+                    /* height: 700px; */
+                    display: block;
+                    margin: 0 auto; /* Центрирует кнопку горизонтально */
+                }
+            }
+    
+            /* Стиль для экранов с шириной 768px и более (обычно это планшеты, ноутбуки и десктопы) */
+            @media (min-width: 768px) {
+                #square {
+                    width: 60%;
+                    display: block;
+                    margin: 0 auto; /* Центрирует кнопку горизонтально */
+                }
+            }
+        </style>
 
                     <!-- Здесь блок карты -->
                     <div class="map-wrapper" style="display: flex; justify-content: center; width: 100%; background-color: #e8e8e8; background-image: url('/static/img/zup.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
@@ -286,26 +321,7 @@
                         });
                     </script>
 
-    <style>
-        /* Стиль для экранов с шириной менее 768px (обычно это мобильные устройства) */
-        @media (max-width: 767px) {
-            #square {
-                width: 90%;
-                /* height: 700px; */
-                display: block;
-                margin: 0 auto; /* Центрирует кнопку горизонтально */
-            }
-        }
 
-        /* Стиль для экранов с шириной 768px и более (обычно это планшеты, ноутбуки и десктопы) */
-        @media (min-width: 768px) {
-            #square {
-                width: 60%;
-                display: block;
-                margin: 0 auto; /* Центрирует кнопку горизонтально */
-            }
-        }
-    </style>
 
 {% endblock %}
 {% block footermain %} 123123 {% endblock %}

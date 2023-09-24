@@ -13,130 +13,116 @@
     {% endif %}
 {% endwith %}
 {{username}} {{admin_mode}}
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const adminCheckbox = document.getElementById('admin');
-            const adminKeyLabel = document.getElementById('admin_key_label');
-            const adminKeyInput = document.getElementById('admin_key');
-
-            adminCheckbox.addEventListener('change', function() {
-                if (this.checked) {
-                    adminKeyLabel.style.display = 'block';
-                    adminKeyInput.style.display = 'block';
-                    adminKeyInput.setAttribute('required', 'required');
-                } else {
-                    adminKeyLabel.style.display = 'none';
-                    adminKeyInput.style.display = 'none';
-                    adminKeyInput.removeAttribute('required');
-                }
-            });
-        });
-    </script>
-
-    <style>
-        @keyframes floatAnimation {
-            0% {
-                background-position: 0% 0%;
-            }
-            10% {
-                background-position: 10% 10%;
-            }
-            20% {
-                background-position: 10% 90%;
-            }
-            30% {
-                background-position: 90% 10%;
-            }
-            40% {
-                background-position: 90% 90%;
-            }
-            50% {
-                background-position: 20% 20%;
-            }
-            60% {
-                background-position: 20% 80%;
-            }
-            70% {
-                background-position: 30% 70%;
-            }
-            80% {
-                background-position: 40% 60%;
-            }
-            90% {
-                background-position: 50% 50%;
-            }
-            100% {
-                background-position: 0% 0%;
-            }
+<style>
+    @keyframes floatAnimation {
+        0% {
+            background-position: 0% 0%;
         }
-
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #fff;
-            color: #900; /* красный цвет текста */
+        10% {
+            background-position: 10% 10%;
         }
-
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 50vh; /* высота экрана */
-            background-color: #fdf4f4; /* светло-серый фон */
-            background-image: url("static/img/emely.jpg");
-            background-repeat: no-repeat;
-            background-size: 200%; /* увеличиваем фон */
-            animation: floatAnimation 30s infinite; /* Примените анимацию */
+        20% {
+            background-position: 10% 90%;
         }
-
-        form {
-            background-color: #fff; /* белый фон */
-            padding: 20px;
-            border: 2px solid #900; /* красная рамка */
-            border-radius: 8px; /* закругленные углы */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* тень */
-            width: 300px;
+        30% {
+            background-position: 90% 10%;
         }
-
-        input[type="submit"] {
-            background-color: #900; /* красный фон */
-            color: #fff; /* белый текст */
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px; /* закругленные углы */
-            cursor: pointer; /* указатель руки при наведении */
-            transition: background-color 0.3s; /* плавное изменение фона */
+        40% {
+            background-position: 90% 90%;
         }
-
-        input[type="submit"]:hover {
-            background-color: #700; /* темно-красный фон при наведении */
+        50% {
+            background-position: 20% 20%;
         }
-
-        label, input {
-            margin-bottom: 10px;
+        60% {
+            background-position: 20% 80%;
         }
-        label {
-        display: block;
-        width: 100%;
+        70% {
+            background-position: 30% 70%;
+        }
+        80% {
+            background-position: 40% 60%;
+        }
+        90% {
+            background-position: 50% 50%;
+        }
+        100% {
+            background-position: 0% 0%;
+        }
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #fff;
+        color: #900; /* красный цвет текста */
+    }
+
+    .login-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50vh; /* высота экрана */
+        background-color: #fdf4f4; /* светло-серый фон */
+        background-image: url("static/img/emely.jpg");
+        background-repeat: no-repeat;
+        background-size: 200%; /* увеличиваем фон */
+        animation: floatAnimation 30s infinite; /* Примените анимацию */
+    }
+
+    form {
+        background-color: #fff; /* белый фон */
+        padding: 20px;
+        border: 2px solid #900; /* красная рамка */
+        border-radius: 8px; /* закругленные углы */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* тень */
+        width: 300px;
+    }
+
+    input[type="submit"] {
+        background-color: #900; /* красный фон */
+        color: #fff; /* белый текст */
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px; /* закругленные углы */
+        cursor: pointer; /* указатель руки при наведении */
+        transition: background-color 0.3s; /* плавное изменение фона */
+    }
+
+    input[type="submit"]:hover {
+        background-color: #700; /* темно-красный фон при наведении */
+    }
+
+    label, input {
         margin-bottom: 10px;
-        text-align: right; /* выровнять текст по правому краю */
-        }
+    }
+    label {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    text-align: right; /* выровнять текст по правому краю */
+    }
 
-        input[type="text"],
-        input[type="password"] {
-            width: 100%; /* ширина поля ввода на всю ширину */
-            padding: 8px;
-            box-sizing: border-box; /* чтобы padding включался в общую ширину */
-            border: 1px solid #ccc; 
-            border-radius: 4px;
-        }
+    input[type="text"],
+    input[type="password"] {
+        width: 100%; /* ширина поля ввода на всю ширину */
+        padding: 8px;
+        box-sizing: border-box; /* чтобы padding включался в общую ширину */
+        border: 1px solid #ccc; 
+        border-radius: 4px;
+    }
 
-        input[type="checkbox"] {
-            margin-left: 10px; /* добавить отступ слева для чекбокса */
-        }
-    </style>
+    input[type="checkbox"] {
+        margin-left: 10px; /* добавить отступ слева для чекбокса */
+    }
+    @media screen and (max-width: 767px) {
+    .login-container {
+        background-size: cover;  /* Масштабирует изображение для заполнения блока */
+    }
+}
+</style>
+    
 
     <h2>Вход в систему</h2>
-    <div class="login-container">
+    <div class="login-container" style="z-index: 9999;">
         <form action="/login" method="post">
             <label for="username">Имя пользователя:
                 <input type="text" id="username" name="username" required>
@@ -166,9 +152,28 @@
         </form>
     </div>
     
-    <br>
+    <br><br><br>
     <a href="/register">Не зарегистрирован?<span style="color: rgb(210, 210, 210); font-size: small;"> ... п*здец</span> Нажми тут!</a>
     <br>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const adminCheckbox = document.getElementById('admin');
+            const adminKeyLabel = document.getElementById('admin_key_label');
+            const adminKeyInput = document.getElementById('admin_key');
+
+            adminCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    adminKeyLabel.style.display = 'block';
+                    adminKeyInput.style.display = 'block';
+                    adminKeyInput.setAttribute('required', 'required');
+                } else {
+                    adminKeyLabel.style.display = 'none';
+                    adminKeyInput.style.display = 'none';
+                    adminKeyInput.removeAttribute('required');
+                }
+            });
+        });
+    </script>
 {% endblock %}
 {% block footermain %} 123123 {% endblock %}
 {% block footersec %} 123123 {% endblock %}

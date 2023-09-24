@@ -141,13 +141,21 @@
                     display: inline-block;
                     position: relative;
                 }
-
+            @media screen and (max-width: 767px) {
+                .dropdown-toggle {
+                    width: 100%;
+                }
+            }
                 /* Стили для блока с текстом "Навигация" */
                 .dropdown-toggle {
-                    padding: 10px 20px;
+                    background-color: #900;
+                    color: #fff;
+                    padding: 10px 15px;
                     cursor: pointer;
-                    border: 1px solid #ccc;
-                    background-color: #f9f9f9;
+                    transition: background-color 0.3s;
+                }
+                .dropdown-toggle:hover {
+                    background-color: #700;
                 }
 
                 /* Стили для скрытого меню */

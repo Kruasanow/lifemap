@@ -12,26 +12,6 @@
         </div>
     {% endif %}
 {% endwith %}
-<script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const adminCheckbox = document.getElementById('admin');
-        const adminKeyLabel = document.getElementById('admin_key_label');
-        const adminKeyInput = document.getElementById('admin_key');
-
-        adminCheckbox.addEventListener('change', function() {
-            if (this.checked) {
-                adminKeyLabel.style.display = 'block';
-                adminKeyInput.style.display = 'block';
-                adminKeyInput.setAttribute('required', 'required');
-            } else {
-                adminKeyLabel.style.display = 'none';
-                adminKeyInput.style.display = 'none';
-                adminKeyInput.removeAttribute('required');
-            }
-        });
-    });
-</script>
-
 <style>
     @keyframes floatAnimation {
         0% {
@@ -138,6 +118,11 @@
     input[type="checkbox"] {
         margin-left: 10px; /* добавить отступ слева для чекбокса */
     }
+    @media screen and (max-width: 767px) {
+    .login-container {
+        background-size: cover;  /* Масштабирует изображение для заполнения блока */
+    }
+}
 </style>
 
 <h2>Регистрация</h2>
@@ -176,7 +161,27 @@
 </div>
 
 <br>
-    <a href="/login">Есть аккаунт? Залогинься!</a>
+    <!-- <a href="/login">Есть аккаунт? Залогинься!</a> -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const adminCheckbox = document.getElementById('admin');
+            const adminKeyLabel = document.getElementById('admin_key_label');
+            const adminKeyInput = document.getElementById('admin_key');
+    
+            adminCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    adminKeyLabel.style.display = 'block';
+                    adminKeyInput.style.display = 'block';
+                    adminKeyInput.setAttribute('required', 'required');
+                } else {
+                    adminKeyLabel.style.display = 'none';
+                    adminKeyInput.style.display = 'none';
+                    adminKeyInput.removeAttribute('required');
+                }
+            });
+        });
+    </script>
 
 {% endblock %}
 {% block footermain %} 123123 {% endblock %}
