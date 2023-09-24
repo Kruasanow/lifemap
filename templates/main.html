@@ -83,7 +83,8 @@
                         <div class="single_testmonial d-flex align-items-center">
                             <div class="test_thumb">
                                 {% if item[3] and item[3][0] and item[3][1] %}
-                                    <img src="{{ url_for('static', filename='uploads/' + username + '/' + item[3][0] + '/' + item[3][1]) }}" alt="">
+                                <img src="{{ url_for('static', filename='uploads/' + selected_username + '/' + item[3][0] + '/' + item[3][1]) }}" alt="">
+
                                 {% endif %}
                             </div>
                             <div class="test_content">
