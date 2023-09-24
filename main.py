@@ -50,11 +50,12 @@ def switch_map_index():
 
 
 @app.route('/delete_event/<int:event_id>')
-@admin_required
+# @admin_required
 @login_required
 def delete_event(event_id):
     conn = get_db_connection()
     cur = conn.cursor()
+    print("Event ID to delete:", event_id)
     cur.execute("DELETE FROM events WHERE id = %s;", (event_id,))
     conn.commit()
     cur.close()

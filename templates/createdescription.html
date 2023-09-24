@@ -157,6 +157,18 @@
             vertical-align: middle;
             margin-right: 10px;
         }
+        .custom-checkbox label {
+            color: #fff;  /* Устанавливаем цвет текста в белый */
+        }
+        .input-style-rating {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fff; /* Установите цвет фона, который вы хотите */
+            font-size: 14px; /* Установите размер шрифта, который вы хотите */
+        }
     </style>
 
     <script>
@@ -204,7 +216,7 @@
             
 
             <label for="{{ form.rating.id }}">{{ form.rating.label }}</label>
-            {{ form.rating(class="input-style") }}<br>
+            {{ form.rating(class="input-style-rating") }}<br>
 
             <div class="custom-checkbox">
                 {{ form.is_private() }}
