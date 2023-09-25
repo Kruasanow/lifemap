@@ -6,120 +6,6 @@
 {{username}} {{admin_banner}}
 
 <h2>Страница ваших событий</h2>
-    <!-- slider_area_start -->
-    <div class="slider_area">
-        <div class="single_slider slider_bg_1 d-flex align-items-center">
-            <div class="container">
-                <div class="row">
-                    <!-- Image for mobile view -->
-                    <div class="col-12 d-lg-none mt-3">
-                        <img src="{{ url_for('static', filename='img/banner/zalupa3.png')}}" alt="" style="width: 100%;">
-                    </div>
-                    <div class="col-lg-5 col-md-6">
-                        <div class="slider_text">
-                            <h3>Мы сохраним <br> <span>Твои воспоминания</span></h3>
-                            <p>Самые яркие эмоции. <br> Самое лучшее настроение.</p><br>
-                            <a href="/createdescription" class="boxed-btn4">Создать событие</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Image for desktop view -->
-            <div class="dog_thumb d-none d-lg-block">
-                <img src="{{ url_for('static', filename='img/banner/zalupa3.png')}}" alt="">
-            </div>
-        </div>
-    </div>
-
-    <script>
-        var selectedUsername = "{{ selected_username }}";
-
-        $(document).ready(function(){
-            $(".textmonial_active").owlCarousel({
-                loop: true,
-                margin: 10,
-                nav: true,
-                items: 1,
-                navText: ["<i class='fa fa-chevron-left'></i>", "<i class='fa fa-chevron-right'></i>"]
-            });
-        });
-        </script>
-<!-- testmonial_area_start -->
-
-<style>
-    .boxed-btn4 {
-    background-color: red;
-    border: none;
-    color: #fff;
-    transition: background-color 0.3s ease;
-}
-
-.boxed-btn4:hover {
-    background-color: darkred;
-}
-@media (max-width: 767px) {
-    .slider_area {
-        margin-bottom: 40px;  /* Увеличиваем отступ снизу для слайдера для большего пространства между элементами */
-    }
-
-    .boxed-btn4 {
-        display: block; 
-        margin: 0 auto; 
-        margin-bottom: 25px; /* Увеличиваем отступ снизу у кнопки для большего пространства между элементами */
-        width: 100%; 
-        box-sizing: border-box;
-        text-align: center;
-    }
-}
-
-</style>
-
-<h2>Переключить пользователя</h2>
-<form action="/switch_user" method="post" class="mt-4">
-    <div class="form-group">
-        <select name="username" class="form-control">
-            {% for friend in users %}
-                <option value="{{ friend }}">{{ friend }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Выбрать пользователя" class="boxed-btn4">
-    </div>
-</form>
-
-{% if ext|length > 0 %}
-<div class="testmonial_area">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="owl-carousel textmonial_active">
-                    {% for item in ext %}
-                    <div class="testmonial_wrap">
-                        <div class="single_testmonial d-flex align-items-center">
-                            <div class="test_thumb">
-                                {% if item[3] and item[3][0] and item[3][1] %}
-                                <img src="{{ url_for('static', filename='uploads/' + selected_username + '/' + item[3][0] + '/' + item[3][1]) }}" alt="">
-                                {% endif %}
-                            </div>
-                            <div class="test_content">
-                                <h4>{{ item[1] }}</h4>
-                                <span>{{ item[2] }}</span>
-                                <!-- <p>{{ item[3] }}</p> -->
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
-
-<!-- testmonial_area_end -->
-
-    <!------------------------------------------------------------------------------------------------------------------------->
 
     <style>
         /* Стиль для экранов с шириной менее 768px (обычно это мобильные устройства) */
@@ -217,11 +103,128 @@
             }
         </style>
 
+<!-- testmonial_area_start -->
+
+<style>
+    .boxed-btn4 {
+    background-color: red;
+    border: none;
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.boxed-btn4:hover {
+    background-color: darkred;
+}
+@media (max-width: 767px) {
+    .slider_area {
+        margin-bottom: 40px;  /* Увеличиваем отступ снизу для слайдера для большего пространства между элементами */
+    }
+
+    .boxed-btn4 {
+        display: block; 
+        margin: 0 auto; 
+        margin-bottom: 25px; /* Увеличиваем отступ снизу у кнопки для большего пространства между элементами */
+        width: 100%; 
+        box-sizing: border-box;
+        text-align: center;
+    }
+}
+
+</style>
+
+    <!-- slider_area_start -->
+    <div class="slider_area">
+        <div class="single_slider slider_bg_1 d-flex align-items-center">
+            <div class="container">
+                <div class="row">
+                    <!-- Image for mobile view -->
+                    <div class="col-12 d-lg-none mt-3">
+                        <img src="{{ url_for('static', filename='img/banner/zalupa3.png')}}" alt="" style="width: 100%;">
+                    </div>
+                    <div class="col-lg-5 col-md-6">
+                        <div class="slider_text">
+                            <h3>Мы сохраним <br> <span>Твои воспоминания</span></h3>
+                            <p>Самые яркие эмоции. <br> Самое лучшее настроение.</p><br>
+                            <a href="/createdescription" class="boxed-btn4">Создать событие</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Image for desktop view -->
+            <div class="dog_thumb d-none d-lg-block">
+                <img src="{{ url_for('static', filename='img/banner/zalupa3.png')}}" alt="">
+            </div>
+        </div>
+    </div>
+
+<h2>Переключить пользователя</h2>
+<form action="/switch_user" method="post" class="mt-4">
+    <div class="form-group">
+        <select name="username" class="form-control">
+            {% for friend in users %}
+                <option value="{{ friend }}">{{ friend }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Выбрать пользователя" class="boxed-btn4">
+    </div>
+</form>
+
+{% if ext|length > 0 %}
+<div class="testmonial_area">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="owl-carousel textmonial_active">
+                    {% for item in ext %}
+                    <div class="testmonial_wrap">
+                        <div class="single_testmonial d-flex align-items-center">
+                            <div class="test_thumb">
+                                {% if item[3] and item[3][0] and item[3][1] %}
+                                <img src="{{ url_for('static', filename='uploads/' + selected_username + '/' + item[3][0] + '/' + item[3][1]) }}" alt="">
+                                {% endif %}
+                            </div>
+                            <div class="test_content">
+                                <h4>{{ item[1] }}</h4>
+                                <span>{{ item[2] }}</span>
+                                <!-- <p>{{ item[3] }}</p> -->
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- testmonial_area_end -->
+
+    <!------------------------------------------------------------------------------------------------------------------------->
+
+
                     <!-- Здесь блок карты -->
                     <div class="map-wrapper" style="display: flex; justify-content: center; width: 100%; background-color: #e8e8e8; background-image: url('/static/img/zup.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
                         <div id="map" style="height: 1600px; margin-top: 20px; margin-bottom: 20px;"></div>
                     </div>
 
+
+                    <script>
+                        var selectedUsername = "{{ selected_username }}";
+                
+                        $(document).ready(function(){
+                            $(".textmonial_active").owlCarousel({
+                                loop: true,
+                                margin: 10,
+                                nav: true,
+                                items: 1,
+                                navText: ["<i class='fa fa-chevron-left'></i>", "<i class='fa fa-chevron-right'></i>"]
+                            });
+                        });
+                        </script>
                     
                     <script>
                         var userFolderPath = "{{ url_for('static', filename='uploads/' + username) }}";

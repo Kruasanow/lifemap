@@ -17,15 +17,18 @@ def allowed_file(filename):
 
 def replaced_string(stroka):
     try:
-        left, right = stroka.split("\\")
+        left, right = stroka.split("/")
     except Exception:
         left, right = '', ''
     return [left, right]
 
+# def replaced_string(stroka):
+#     try:
+#         left, right = stroka.split("\\")
+#     except Exception:
+#         left, right = '', ''
+#     return [left, right]
 
-            # <label for="admin_key" id="admin_key_label" style="display: none;">Ключ:
-            #     <input type="password" id="admin_key" name="admin_key" style="display: none;">
-            # </label>
 
 def check_admin():
     from flask import session

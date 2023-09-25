@@ -188,7 +188,27 @@
             max-height: 100%;
         }
     </style>
-                    <!-- Здесь блок карты -->
+        <style>
+            /* Стиль для экранов с шириной менее 768px (обычно это мобильные устройства) */
+            @media (max-width: 767px) {
+                #square {
+                    width: 90%;
+                    /* height: 700px; */
+                    display: block;
+                    margin: 0 auto; /* Центрирует кнопку горизонтально */
+                }
+            }
+    
+            /* Стиль для экранов с шириной 768px и более (обычно это планшеты, ноутбуки и десктопы) */
+            @media (min-width: 768px) {
+                #square {
+                    width: 60%;
+                    display: block;
+                    margin: 0 auto; /* Центрирует кнопку горизонтально */
+                }
+            }
+        </style>
+                    <!-- Здесь блок zup -->
                     <div class="map-wrapper" style="display: flex; justify-content: center; width: 100%; background-color: #e8e8e8; background-image: url('/static/img/zup.png'); background-repeat: no-repeat; background-size: cover; background-position: center;">
                         <div id="map" style="height: 1600px; margin-top: 20px; margin-bottom: 20px;"></div>
                     </div>
@@ -293,26 +313,6 @@
                         });
                     </script>
 
-    <style>
-        /* Стиль для экранов с шириной менее 768px (обычно это мобильные устройства) */
-        @media (max-width: 767px) {
-            #square {
-                width: 90%;
-                /* height: 700px; */
-                display: block;
-                margin: 0 auto; /* Центрирует кнопку горизонтально */
-            }
-        }
-
-        /* Стиль для экранов с шириной 768px и более (обычно это планшеты, ноутбуки и десктопы) */
-        @media (min-width: 768px) {
-            #square {
-                width: 60%;
-                display: block;
-                margin: 0 auto; /* Центрирует кнопку горизонтально */
-            }
-        }
-    </style>
 
     <form action="/button_pressed" method="post">
         <input type="submit" id="square" class="square-button" value="Сохранить воспоминание!">
