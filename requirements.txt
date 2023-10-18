@@ -1,8 +1,6 @@
 flask_wtf
 wtforms
-os
 psycopg2
 flask
 werkzeug
 flask_bcrypt
-functools
