@@ -1,3 +1,4 @@
 sensetive_data.py
 TZ.txt
 static/uploads/*
+.env
