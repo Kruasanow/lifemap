@@ -4,3 +4,4 @@ psycopg2
 flask
 werkzeug
 flask_bcrypt
+gunicorn
