@@ -115,12 +115,24 @@
     border: 1px solid #ccc; 
     border-radius: 4px;
     }
+    input[type="tg"] {  /* Добавлен input[type="tg"] */
+    width: 100%; /* ширина поля ввода на всю ширину */
+    padding: 8px;
+    box-sizing: border-box; /* чтобы padding включался в общую ширину */
+    border: 1px solid #ccc; 
+    border-radius: 4px;
+    }
     input[type="checkbox"] {
         margin-left: 10px; /* добавить отступ слева для чекбокса */
     }
     @media screen and (max-width: 767px) {
     .login-container {
         background-size: cover;  /* Масштабирует изображение для заполнения блока */
+    }
+    @media (max-width: 750px) {
+    h2 {
+        display: none; /* Скрыть строку при маленьком экране */
+    }
     }
 }
 </style>
@@ -138,6 +150,10 @@
 
         <label for="email">Email:
             <input type="email" id="email" name="email" required>
+        </label>
+
+        <label for="tg">Telegram*:
+            <input type="tg" id="tg" name="tg" required>
         </label>
 
         <label for="username">Никнейм:

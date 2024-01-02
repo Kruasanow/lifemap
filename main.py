@@ -80,6 +80,7 @@ def register():
         fname = request.form['fname']
         sname = request.form['sname']
         email = request.form['email']
+        tg = request.form['tg']
         admin = request.form.get('admin', 0)
         username = request.form['username']
         password = request.form['password']
@@ -99,8 +100,8 @@ def register():
             return render_template('register.html')
 
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-        cur.execute("INSERT INTO users (username, fname, sname, email, admin, passwd, secret) VALUES (%s, %s, %s, %s, %s, %s, %s)",
-                    (username, fname, sname, email, admin, hashed_password, secret))
+        cur.execute("INSERT INTO users (username, fname, sname, email, tg, admin, passwd, secret) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)",
+                    (username, fname, sname, email, tg, admin, hashed_password, secret))
         conn.commit()
         cur.close()
         conn.close()

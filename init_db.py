@@ -54,6 +54,7 @@ try:
                                         'fname TEXT NOT NULL,'
                                         'sname TEXT NOT NULL,'
                                         'email TEXT NOT NULL,'
+                                        'tg TEXT,'
                                         'admin INTEGER NOT NULL,'
                                         'passwd TEXT NOT NULL,'
                                         'secret TEXT NOT NULL,'
